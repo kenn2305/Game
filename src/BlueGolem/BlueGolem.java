@@ -13,7 +13,8 @@
     import java.util.Random;
 
     public class BlueGolem extends Entity {
-        protected float maxHealth = 250; protected float currentHealth;
+        protected float maxHealth = 10; protected float currentHealth;
+        protected float damage = 30;
         protected Random rand;
         private BufferedImage sprite_sheet;
         private BufferedImage[][] animations;
@@ -21,7 +22,7 @@
         protected Player player;
         private Ray ray;
         protected int Direction = 1; protected Boolean lockDirection;
-        private Rectangle Hitbox; public Color hitboxColor; private Boolean hitbox_active = false;
+        private Rectangle Hitbox; public Color hitboxColor; protected Boolean hitbox_active = false;
         enum State {
             IDLE,
             WANDER;
@@ -142,8 +143,14 @@
 
             if (Hitbox.intersects(player.getBound()) && canSee()){
                 isAttack = true;
+                if (hitbox_active){
+                    player.getDamageFromEnemy(damage,true);
+                } else {
+                    player.getDamageFromEnemy(0,false);
+                }
             } else {
                 isAttack = false;
+                player.getDamageFromEnemy(0,false);
             }
 
 
@@ -175,7 +182,6 @@
         }
 
         private void HealthBar(Graphics g , int offsetX , int offsetY){
-            heathWidth = (int)((currentHealth / (float)maxHealth) * maxHealthBar);
             if (display && !death) {
                 g.setColor(new Color(0, 0, 0));
                 g.fillRect(collisionBox.x - 11 - offsetX,
@@ -208,9 +214,11 @@
             updateHitbox();
             updateRayCastFloor();
             stateUpdate(delta);
-            System.out.println(intersectsInChase);
+            updateHealthBar();
         }
-
+        private void updateHealthBar(){
+            heathWidth = (int)((currentHealth / (float)maxHealth) * maxHealthBar);
+        }
         protected void stateTimer(float delta) {
             stateTimer += delta * 2;
             if (stateTimer >= stateTimeOut){

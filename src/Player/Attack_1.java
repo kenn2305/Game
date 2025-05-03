@@ -12,7 +12,7 @@ public class Attack_1 extends PlayerState{
     }
     @Override
     protected void update(float delta) {
-        player.damage = 10;
+        player.damage = (int) (player.default_dame_1 + player.default_dame_1 * player.damageScale);
         player.setLockDirection(true);
         player.setFinishedAttack(false);
         updateAniFrames(stateTime);

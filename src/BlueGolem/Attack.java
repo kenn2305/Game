@@ -32,6 +32,11 @@ public class Attack extends BlueGolemState{
 
     private void updateState(float delta) {
         blueGolem.setVelX(0);
+        if (aniFrame >= 6 && aniFrame <= 9){
+            blueGolem.hitbox_active = true;
+        } else {
+            blueGolem.hitbox_active = false;
+        }
         if (blueGolem.death) {
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;

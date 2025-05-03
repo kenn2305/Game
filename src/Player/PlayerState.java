@@ -48,11 +48,13 @@ public class PlayerState extends State {
     }
 
     protected void updateMovementInState(float delta) {
+        float velocityX = Physics.Velocity + Physics.Velocity * player.speedScale;
+        System.out.println(player.speedScale);
         if (player.getLeft() && !player.getRight()) {
-            float newVelX = Maths.Lerp(player.getVelX(), -Physics.Velocity, delta * 10);
+            float newVelX = Maths.Lerp(player.getVelX(), -velocityX, delta * 10);
             player.setVelX(newVelX);
         } else if (!player.getLeft() && player.getRight()) {
-            float newVelX = Maths.Lerp(player.getVelX(), Physics.Velocity, delta * 10);
+            float newVelX = Maths.Lerp(player.getVelX(), velocityX, delta * 10);
             player.setVelX(newVelX);
         } else {
             float newVelX = Maths.Lerp(player.getVelX(), 0, delta * 15);

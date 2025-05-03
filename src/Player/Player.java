@@ -18,30 +18,32 @@ public class Player extends Entity {
     private Boolean left = false, right = false; //Movement
     private Boolean isPressedJump = false , isConsumedJump = false , jump = false , double_jump = false; //Jump
     private Boolean isPressedDash = false , isConsumedDash = false , isDash = false , canDash = false; //Dash but maybe i make it later :)
-    private Boolean isPressedAttack = false, isConsumedAttack = false, isAttack = false; protected float damage = 20;//Attack Input
+    private Boolean isPressedAttack = false, isConsumedAttack = false, isAttack = false; protected int default_dame_1 = 10 ; protected int default_dame_2 = 20 ; protected int damage = default_dame_1;//Attack Input
     private final long COMBO_TIMEOUT_RS = 500000000L; private int attack_stage = 0; private int max_combo = 2; private long lastAttackTime; private Boolean finishedAttack = false;//For attack
     private Rectangle Hitbox; private Boolean hitbox_active = false;
-
+    private float hurt_timer = 0; private float hurt_time = 0.8f; private Boolean hurt = false; private float taken_damage;
     //UI Healthbar, bla bla...
     private BufferedImage icon;
-    private BufferedImage fullhealthbar;
-    private BufferedImage healthbar;
+    private float maxHealth = 150;
+    private float currentHealth = maxHealth;
+    private int maxHealthBarWidth = (int) (200 * Game.GAME_SCALE * 1.5);
+    private int currentHealthBarWidth = maxHealthBarWidth;
+    //Effect from items
+    protected float damageScale = 0; protected float timeDamageScale; protected Boolean damageApplied = false;
+    protected float speedScale = 0; protected float timeSpeedScale; protected Boolean speedApplied = false;
+    protected float heal; protected Boolean healApplied = false; protected Boolean getHeal = false;
     public Player(float x, float y, LevelManager levelManager) {
         super(x, y, levelManager);
         this.stateMachine = new PlayerStateMachine(this, levelManager);
         InitPlayer();
-        InitUI();
         loadAnimations();
         InitBounds();
         InitHitbox();
         hitbox_color = new Color(0, 0, 255, 130);
     }
-
-
     private void InitPlayer() {
         player_sheet = LoadSave.loadImage(LoadSave.PLAYER);
-    }
-    private void InitUI(){
+        icon = LoadSave.loadImage(LoadSave.FBK_ICON);
     }
     private void InitBounds() {
         collisionBox = new Rectangle((int)(18 * Game.GAME_SCALE * 1.5f),(int)(27 * Game.GAME_SCALE * 1.5f));
@@ -69,6 +71,11 @@ public class Player extends Entity {
         }
 
     }
+    private void drawHealthBar(Graphics g){
+        g.drawImage(icon,3,3, (int) (icon.getWidth() * 0.4f), (int) (icon.getHeight() * 0.4f),null);
+        g.setColor(new Color(0,225,0));
+        g.fillRect((int)(icon.getWidth() * 0.4f) + 3, 3, currentHealthBarWidth , 13);
+    }
     private void updateHitbox(){
         if (Direction == -1){
             int hitbox_x = (int)(collisionBox.x + collisionBox.width - 15 * Game.GAME_SCALE * 1.5 - Hitbox.width);
@@ -85,7 +92,31 @@ public class Player extends Entity {
             hitbox_color = new Color(225, 0, 0, 130);
         }
     }
+    private void updateEffect(float delta){
+        if (damageApplied && timeDamageScale > 0){
+            timeDamageScale -= delta * 2;
+        } else {
+            damageScale = 0;
+            damageApplied = false;
+        }
 
+        if (speedApplied && timeSpeedScale > 0){
+            timeSpeedScale -= delta * 2;
+        } else {
+            speedScale = 0;
+            speedApplied = false;
+        }
+
+        if (healApplied && !getHeal){
+            if (currentHealth < maxHealth){
+                currentHealth += heal;
+                getHeal = true;
+            }
+        } else {
+            healApplied = false;
+            getHeal = false;
+        }
+    }
     private void attackProcess(){
         long now = System.nanoTime();
         if (isPressedAttack && !isConsumedAttack){
@@ -132,6 +163,9 @@ public class Player extends Entity {
         super.update(delta_time);
         setMoving(delta_time);
         updateHitbox();
+        updateHurtTime(delta_time);
+        updateHealthBar();
+        updateEffect(delta_time);
         if (isPressedJump && !isConsumedJump){
             jump = true;
             isConsumedJump = true;
@@ -146,10 +180,25 @@ public class Player extends Entity {
             isDash = false;
         }
     }
-
+    private void updateHealthBar(){
+        currentHealthBarWidth = (int)((float)currentHealth/maxHealth * maxHealthBarWidth);
+    }
+    private void updateHurtTime(float delta){
+        if (hurt && hurt_timer <= 0){
+            currentHealth -= taken_damage;
+            hurt_timer = hurt_time;
+        }
+        if (hurt_timer > 0){
+            hurt_timer-= delta * 2;
+        }
+    }
+    public void getDamageFromEnemy(float damage, Boolean hurt){
+        taken_damage = damage;
+        this.hurt = hurt;
+    }
     public void render(Graphics g , int offsetX , int offsetY) {
         stateMachine.render(g, offsetX, offsetY);
-
+        drawHealthBar(g);
     }
 
     public Boolean getHitbox_active() {
@@ -314,5 +363,26 @@ public class Player extends Entity {
     }
     public float getDame(){
         return damage;
+    }
+    public void applyEffectFromPotion(String item, float scale , float time) {
+        if (item == "BLUE"){
+            speedScale = scale;
+            timeSpeedScale = time;
+        } else if (item == "RED"){
+            damageScale = scale;
+            timeDamageScale = time;
+        }
+    }
+    public void applyEffectFromHamburger(float heal) {
+        this.heal = heal;
+    }
+    public void setDamageApplied(Boolean damageApplied) {
+        this.damageApplied = damageApplied;
+    }
+    public void setSpeedApplied(Boolean speedApplied) {
+        this.speedApplied = speedApplied;
+    }
+    public void setHealApplied(Boolean healApplied) {
+        this.healApplied = healApplied;
     }
 }

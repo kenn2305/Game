@@ -72,6 +72,14 @@ public class Chase extends BlueGolemState{
             } else if (blueGolem.states == BlueGolem.State.WANDER){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Wander);
             }
+        } else if (blueGolem.checkCollisionFloor() && !blueGolem.rayCastFloorActive){
+            blueGolem.Direction *= -1;
+            blueGolem.intersectsInChase = true;
+            if (blueGolem.states == BlueGolem.State.IDLE){
+                blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Idle);
+            } else if (blueGolem.states == BlueGolem.State.WANDER){
+                blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Wander);
+            }
         }
 
         if (blueGolem.isAttack){

@@ -21,6 +21,9 @@ public class LoadSave {
     public static final String PLAYER = "Fbk.png";
     public static final String BLUEGOLEM = "BlueGolem.png";
     public static final String GOLDGOLEM = "GoldGolem.png";
+    public static final String BRINGER_OF_DEATH = "BringerOfDeath.png";
+    public static final String ITEMS = "items.png";
+    public static final String FBK_ICON = "FbkIcon.png";
     public static BufferedImage loadImage(String filename) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/res/"+filename);

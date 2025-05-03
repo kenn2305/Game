@@ -31,6 +31,7 @@ public class Death extends BlueGolemState{
         updateState(delta);
     }
     private void updateState(float delta) {
+        blueGolem.setVelX(0);
         if (finished){
             blueGolem.finisedDeath = true;
         }

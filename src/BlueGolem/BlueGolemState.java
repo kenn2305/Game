@@ -32,24 +32,7 @@ public class BlueGolemState extends State {
                     (int)(blueGolem.getSprite(0,0).getHeight() * Game.GAME_SCALE * 1.5), null);
         }
     }
-    protected void updateAniFrames(int stateFrames){
-        aniTick++;
-        if (aniTick >= aniSpeed) {
-            aniFrame = (aniFrame + 1) % stateFrames;
-            aniTick = 0;
-        }
-        if (aniFrame >= stateFrames - 1) {
-            finished = true;
-        } else {
-            finished = false;
-        }
-    }
-    protected void playAnimation(int state , int stateTime){
-        aniFrame = 0;
-        aniTick = 0;
-        this.state = state;
-        this.stateTime = stateTime;
-    }
+    
 
     protected void updateMovementInState(float delta){
         float newVelX = Maths.Lerp(blueGolem.getVelX(), Physics.WANDER_VELOCITY * blueGolem.Direction, delta * 50);

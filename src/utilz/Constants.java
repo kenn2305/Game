@@ -38,4 +38,15 @@ public class Constants {
         public static final int BORN = 13;
         public static final int DIE = 13;
     }
+
+    public static class ItemConstants {
+        public static final int BLUE_POTION = 0;
+        public static final int RED_POTION = 1;
+        public static final int HAMBURGER = 2;
+    }
+    public static class ItemAniConstants {
+        public static final int BLUE_POTION = 7;
+        public static final int RED_POTION = 7;
+        public static final int HAMBURGER = 7;
+    }
 }
