@@ -1,6 +1,38 @@
 package utilz;
 
+import Game.Game;
+
 public class Constants {
+    public static class MenuButton{
+        public static final int MENU_BUTTON_DEFAULT_WIDTH = 69;
+        public static final int MENU_BUTTON_DEFAULT_HEIGHT = 21;
+        public static final int MENU_BUTTON_WIDTH = (int) (MENU_BUTTON_DEFAULT_WIDTH * Game.GAME_SCALE * 3);
+        public static final int MENU_BUTTON_HEIGHT  = (int) (MENU_BUTTON_DEFAULT_HEIGHT * Game.GAME_SCALE * 3);
+        public static final int BACKGROUND_BUTTON_DEFAULT_WIDTH = 100;
+        public static final int BACKGROUND_BUTTON_DEFAULT_HEIGHT = 117;
+        public static final int BACKGROUND_BUTTON_WIDTH = (int) (BACKGROUND_BUTTON_DEFAULT_WIDTH * Game.GAME_SCALE * 2);
+        public static final int BACKGROUND_BUTTON_HEIGHT = (int) (BACKGROUND_BUTTON_DEFAULT_HEIGHT * Game.GAME_SCALE * 2);
+    }
+    public static class PauseButton{
+        public static final int SOUND_SIZE_DEFAULT_WIDTH = 23;
+        public static final int SOUND_SIZE_DEFAULT_HEIGHT = 21;
+        public static final int SOUND_SIZE_WIDTH = (int) (SOUND_SIZE_DEFAULT_WIDTH * Game.GAME_SCALE * 2.5);
+        public static final int SOUND_SIZE_HEIGHT = (int) (SOUND_SIZE_DEFAULT_HEIGHT * Game.GAME_SCALE * 2.5);
+    }
+    public static class URMButton{
+        public static final int URM_SIZE_DEFAULT_WIDTH = 23;
+        public static final int URM_SIZE_DEFAULT_HEIGHT = 21;
+        public static final int URM_SIZE_WIDTH = (int) (URM_SIZE_DEFAULT_WIDTH * Game.GAME_SCALE * 2.5);
+        public static final int URM_SIZE_HEIGHT = (int) (URM_SIZE_DEFAULT_HEIGHT * Game.GAME_SCALE * 2.5);
+    }
+    public static class VolumeButton{
+        public static final int VOLUME_SIZE_DEFAULT_WIDTH = 10;
+        public static final int VOLUME_SIZE_DEFAULT_HEIGHT = 21;
+        public static final int VOLUME_SIZE_WIDTH = (int) (VOLUME_SIZE_DEFAULT_WIDTH * Game.GAME_SCALE * 2.5);
+        public static final int VOLUME_SIZE_HEIGHT = (int) (VOLUME_SIZE_DEFAULT_HEIGHT * Game.GAME_SCALE * 2.5);
+        public static final int SLIDER_DEFAULT_WIDTH = 69;
+        public static final int SLIDER_WIDTH = (int) (SLIDER_DEFAULT_WIDTH * Game.GAME_SCALE * 2.5);
+    }
     public static class PlayerConstants {
         public static final int IDLE = 0;
         public static final int RUNNING = 1;

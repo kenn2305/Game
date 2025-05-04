@@ -24,6 +24,14 @@ public class LoadSave {
     public static final String BRINGER_OF_DEATH = "BringerOfDeath.png";
     public static final String ITEMS = "items.png";
     public static final String FBK_ICON = "FbkIcon.png";
+    public static final String MENU_BUTTON = "MenuButtons.png";
+    public static final String MENU_BUTTON_BACKGROUND = "menu_background.png";
+    public static final String MENU_BACKGROUND = "background.png";
+    public static final String PAUSE_BACKGROUND = "pause_background.png";
+    public static final String SOUND_BUTTON = "sound_button.png";
+    public static final String URM_BUTTOM = "urm_button.png";
+    public static final String VOLUME = "volumn_num.png";
+    public static final String SLIDER = "slider.png";
     public static BufferedImage loadImage(String filename) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/res/"+filename);

@@ -13,7 +13,7 @@
     import java.util.Random;
 
     public class BlueGolem extends Entity {
-        protected float maxHealth = 10; protected float currentHealth;
+        protected float maxHealth = 250; protected float currentHealth;
         protected float damage = 30;
         protected Random rand;
         private BufferedImage sprite_sheet;
@@ -23,6 +23,9 @@
         private Ray ray;
         protected int Direction = 1; protected Boolean lockDirection;
         private Rectangle Hitbox; public Color hitboxColor; protected Boolean hitbox_active = false;
+        private Boolean hitplayer = false;
+        protected float attackCooldown = 1.0f; // Thời gian chờ giữa các lần tấn công (giây)
+        protected float attackTimer = 0.0f;
         enum State {
             IDLE,
             WANDER;
@@ -141,16 +144,22 @@
                 }
             }
 
-            if (Hitbox.intersects(player.getBound()) && canSee()){
+            if (Hitbox.intersects(player.getBound()) && canSee()) {
                 isAttack = true;
-                if (hitbox_active){
-                    player.getDamageFromEnemy(damage,true);
+                if (hitbox_active && attackTimer <= 0) {
+                    player.getDamageFromEnemy(damage, true);
+                    hitplayer = true;
+                    attackTimer = attackCooldown; // Reset cooldown
                 } else {
-                    player.getDamageFromEnemy(0,false);
+                    hitplayer = false;
                 }
             } else {
                 isAttack = false;
-                player.getDamageFromEnemy(0,false);
+                hitplayer = false;
+            }
+
+            if (attackTimer > 0) {
+                attackTimer -= delta * 2;
             }
 
 

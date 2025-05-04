@@ -21,13 +21,13 @@ public class Player extends Entity {
     private Boolean isPressedAttack = false, isConsumedAttack = false, isAttack = false; protected int default_dame_1 = 10 ; protected int default_dame_2 = 20 ; protected int damage = default_dame_1;//Attack Input
     private final long COMBO_TIMEOUT_RS = 500000000L; private int attack_stage = 0; private int max_combo = 2; private long lastAttackTime; private Boolean finishedAttack = false;//For attack
     private Rectangle Hitbox; private Boolean hitbox_active = false;
-    private float hurt_timer = 0; private float hurt_time = 0.8f; private Boolean hurt = false; private float taken_damage;
     //UI Healthbar, bla bla...
     private BufferedImage icon;
     private float maxHealth = 150;
     private float currentHealth = maxHealth;
     private int maxHealthBarWidth = (int) (200 * Game.GAME_SCALE * 1.5);
     private int currentHealthBarWidth = maxHealthBarWidth;
+    private Boolean hurt = false;
     //Effect from items
     protected float damageScale = 0; protected float timeDamageScale; protected Boolean damageApplied = false;
     protected float speedScale = 0; protected float timeSpeedScale; protected Boolean speedApplied = false;
@@ -163,7 +163,6 @@ public class Player extends Entity {
         super.update(delta_time);
         setMoving(delta_time);
         updateHitbox();
-        updateHurtTime(delta_time);
         updateHealthBar();
         updateEffect(delta_time);
         if (isPressedJump && !isConsumedJump){
@@ -183,17 +182,9 @@ public class Player extends Entity {
     private void updateHealthBar(){
         currentHealthBarWidth = (int)((float)currentHealth/maxHealth * maxHealthBarWidth);
     }
-    private void updateHurtTime(float delta){
-        if (hurt && hurt_timer <= 0){
-            currentHealth -= taken_damage;
-            hurt_timer = hurt_time;
-        }
-        if (hurt_timer > 0){
-            hurt_timer-= delta * 2;
-        }
-    }
+
     public void getDamageFromEnemy(float damage, Boolean hurt){
-        taken_damage = damage;
+        currentHealth -= damage;
         this.hurt = hurt;
     }
     public void render(Graphics g , int offsetX , int offsetY) {

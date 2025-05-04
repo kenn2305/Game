@@ -39,13 +39,13 @@ public class ObjecManager {
         }
     }
     public void update(float delta) {
-        removeInactiveItems();
         for (Hamburger hamburger : hamburgers) {
             hamburger.update(delta);
         }
         for (Potion potion : Potions) {
             potion.update(delta);
         }
+        removeInactiveItems();
     }
 
     public void render(Graphics g, int offsetX, int offsetY) {

@@ -10,7 +10,7 @@ public class GamePanel extends JPanel {
     private MouseInput mouse;
     public GamePanel(GameController gameController) {
         this.gameController = gameController;
-        mouse = new MouseInput();
+        mouse = new MouseInput(this);
         setPanelSize(Game.GAME_WIDTH, Game.GAME_HEIGHT);
         addKeyListener(new KeyboardInput(this));
         addMouseListener(mouse);

@@ -2,6 +2,9 @@ package Game;
 import BlueGolem.BlueGolem;
 import Camera.Camera2D;
 import EnemyManager.EnemyManager;
+import GameState.GameState;
+import GameState.Playing;
+import GameState.Menu;
 import Player.Player;
 import Levels.LevelManager;
 import Player.PlayerStateMachine;
@@ -10,36 +13,48 @@ import java.awt.*;
 
 
 public class GameController {
-    private LevelManager levelManager;
     private GamePanel gamePanel;
     private GameWindow gameWindow;
-    private Player player;
-    private Camera2D camera;
-    private EnemyManager enemyManager;
+    private Menu menu;
+    private Playing playing;
     public GameController() {
-        levelManager = new LevelManager();
-        player = new Player(0,0, levelManager);
-        enemyManager = new EnemyManager(player,levelManager);
-        camera = new Camera2D(player,levelManager,enemyManager);
+        playing = new Playing();
+        menu = new Menu();
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
     }
 
     public void draw(Graphics g) {
-        camera.render(g);
+        switch (GameState.state){
+            case MENU:
+                menu.render(g);
+                break;
+            case PLAYING:
+                playing.render(g);
+                break;
+        }
     }
 
     public void render(){
         gamePanel.repaint();
     }
     public void update(float delta){
-        player.update(delta);
-        enemyManager.update(delta);
-        camera.update();
+        switch (GameState.state){
+            case MENU:
+                menu.update(delta);
+                break;
+            case PLAYING:
+                playing.update(delta);
+                break;
+        }
     }
 
-    public Player getPlayer() {
-        return player;
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public Playing getPlaying() {
+        return playing;
     }
 }

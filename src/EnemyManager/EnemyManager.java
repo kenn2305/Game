@@ -46,7 +46,7 @@ public class EnemyManager {
     }
     private void addBlueGolem(float delta) {
         spawnTimer += delta * 2;
-        if (spawnTimer > 0.0f && blueGolems.size() < 1) {
+        if (spawnTimer > 5.0f && blueGolems.size() < 5) {
             int index = rand.nextInt(spawnPoint.size());
             int[] spawn = spawnPoint.get(index);
             BlueGolem blueGolem = new BlueGolem(spawn[0], spawn[1], level, player);
