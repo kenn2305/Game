@@ -38,8 +38,6 @@ public class MenuButton {
     public void render(Graphics g) {
         g.drawImage(images[index], xPos - xOffsetCenter, yPos,
                 Constants.MenuButton.MENU_BUTTON_WIDTH, Constants.MenuButton.MENU_BUTTON_HEIGHT, null);
-
-        System.out.println(index);
     }
 
     public void update() {

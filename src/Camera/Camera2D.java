@@ -16,21 +16,22 @@ public class Camera2D {
     private int width = Game.GAME_WIDTH;
     private int height = Game.GAME_HEIGHT;
     private int xLimit,yLimit;
-    private int maxX = Game.MAP_WIDTH - width;
-    private int maxY = Game.MAP_HEIGHT - height;
+    private int maxX;
+    private int maxY;
     private Player player;
     private EnemyManager enemyManager;
     private LevelManager level;
     private int offsetX, offsetY;
+    private Boolean firstFrame = true;
     public Camera2D(Player player , LevelManager level , EnemyManager enemyManager) {
         System.out.println(maxX + " " + maxY);
         this.player = player;
         this.level = level;
         this.enemyManager = enemyManager;
-        this.CameraX = 0;
-        this.CameraY = 0;
-        offsetX = 0;
-        offsetY = 0;
+        this.CameraX = player.getBound().x;
+        this.CameraY = player.getBound().y;
+        maxX = level.getCurrentLevel().getMap_width() - width;
+        maxY = level.getCurrentLevel().getMap_height()- height;
         xLimit = Game.GAME_WIDTH / 2;
         yLimit = Game.GAME_HEIGHT / 2;
     }
@@ -80,21 +81,11 @@ public class Camera2D {
     }
 
      private void DebugHitBox(Graphics g) {
-         Graphics2D g2 = (Graphics2D) g;
-         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                 RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                 RenderingHints.VALUE_ANTIALIAS_OFF);
-        g2.setColor(player.hitbox_color);
-        g2.fillRect(player.getHitbox().x - offsetX, player.getHitbox().y - offsetY, player.getHitbox().width, player.getHitbox().height);
+        g.setColor(player.hitbox_color);
+        g.fillRect(player.getHitbox().x - offsetX, player.getHitbox().y - offsetY, player.getHitbox().width, player.getHitbox().height);
 
      }
     private void DrawMapInViewPort(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_OFF);
         Map<String, int[][]> map = level.getCurrentLevel().getMap_data();
         List<Rectangle> bounds = level.getCurrentLevel().getTileBounds();
         //Draw map
@@ -102,7 +93,7 @@ public class Camera2D {
             int[][] layer_data = map.get(layer);
             for ( int i = 0 ; i < layer_data.length ; i++ ) {
                 for ( int j = 0 ; j < layer_data[i].length ; j++) {
-                    g2.drawImage(level.getTileGrid(layer_data[i][j]),
+                    g.drawImage(level.getTileGrid(layer_data[i][j]),
                             j * Game.MAP_TILE_SIZE - offsetX,
                             i * Game.MAP_TILE_SIZE - offsetY,
                             Game.MAP_TILE_SIZE,
@@ -112,14 +103,14 @@ public class Camera2D {
         }
         //Debug
         for (Rectangle bound : bounds) {
-            g2.setColor(new Color(0,0,130,80));
-            g2.fillRect(bound.x - offsetX, bound.y - offsetY, bound.width, bound.height);
+            g.setColor(new Color(0,0,130,80));
+            g.fillRect(bound.x - offsetX, bound.y - offsetY, bound.width, bound.height);
         }
     }
 
     private void drawPlayerInViewPort(Graphics g) {
-        player.render(g,offsetX,offsetY);
         enemyManager.render(g,offsetX,offsetY);
+        player.render(g,offsetX,offsetY);
     }
     public float getOffsetX() {
         return offsetX;

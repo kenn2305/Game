@@ -18,7 +18,7 @@ public class Player extends Entity {
     private Boolean left = false, right = false; //Movement
     private Boolean isPressedJump = false , isConsumedJump = false , jump = false , double_jump = false; //Jump
     private Boolean isPressedDash = false , isConsumedDash = false , isDash = false , canDash = false; //Dash but maybe i make it later :)
-    private Boolean isPressedAttack = false, isConsumedAttack = false, isAttack = false; protected int default_dame_1 = 10 ; protected int default_dame_2 = 20 ; protected int damage = default_dame_1;//Attack Input
+    private Boolean isPressedAttack = false, isConsumedAttack = false, isAttack = false; protected int default_dame_1 = 30 ; protected int default_dame_2 = 50 ; protected int damage = default_dame_1;//Attack Input
     private final long COMBO_TIMEOUT_RS = 500000000L; private int attack_stage = 0; private int max_combo = 2; private long lastAttackTime; private Boolean finishedAttack = false;//For attack
     private Rectangle Hitbox; private Boolean hitbox_active = false;
     //UI Healthbar, bla bla...
@@ -32,6 +32,8 @@ public class Player extends Entity {
     protected float damageScale = 0; protected float timeDamageScale; protected Boolean damageApplied = false;
     protected float speedScale = 0; protected float timeSpeedScale; protected Boolean speedApplied = false;
     protected float heal; protected Boolean healApplied = false; protected Boolean getHeal = false;
+    //Kill enemy
+    private int enemy_kill_num = 0;
     public Player(float x, float y, LevelManager levelManager) {
         super(x, y, levelManager);
         this.stateMachine = new PlayerStateMachine(this, levelManager);
@@ -62,9 +64,9 @@ public class Player extends Entity {
         }
     }
     private void setMoving(float delta){
-        if (x >= Game.MAP_WIDTH - collisionBox.width){
+        if (x >= levelManager.getCurrentLevel().getMap_width()- collisionBox.width){
             velX = 0;
-            x = Game.MAP_WIDTH - collisionBox.width;
+            x = levelManager.getCurrentLevel().getMap_width() - collisionBox.width;
         } else if (x < 0){
             velX = 0;
             x = 0;
@@ -177,6 +179,11 @@ public class Player extends Entity {
             isConsumedDash = true;
         } else {
             isDash = false;
+        }
+        if (currentHealth > maxHealth){
+            currentHealth = maxHealth;
+        } else if (currentHealth < 0){
+            currentHealth = 0;
         }
     }
     private void updateHealthBar(){
@@ -375,5 +382,19 @@ public class Player extends Entity {
     }
     public void setHealApplied(Boolean healApplied) {
         this.healApplied = healApplied;
+    }
+    public void setEnemy_kill_num(int enemy_kill_num) {
+        this.enemy_kill_num = enemy_kill_num;
+    }
+    public int getEnemy_kill_num(){
+        return enemy_kill_num;
+    }
+    public void resetPlayer(int x, int y){
+        this.x = x;
+        this.y = y;
+        currentHealth = maxHealth;
+        enemy_kill_num = 0;
+        damageScale = 0;
+        speedScale = 0;
     }
 }

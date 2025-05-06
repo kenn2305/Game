@@ -4,11 +4,13 @@ import Camera.Camera2D;
 import EnemyManager.EnemyManager;
 import Levels.LevelManager;
 import Player.Player;
+import ui.LevelCompleteOverlay;
 import ui.PauseOverlay;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class Playing implements StateMethods{
     private LevelManager levelManager;
@@ -17,32 +19,63 @@ public class Playing implements StateMethods{
     private EnemyManager enemyManager;
     private Boolean paused = false;
     private PauseOverlay pauseOverlay;
+    private LevelCompleteOverlay levelCompleteOverlay;
+    private Boolean levelComplete = false;
+    public Boolean gameComplete = false;
     public Playing() {
-        levelManager = new LevelManager();
-        player = new Player(0,0, levelManager);
+        levelManager = new LevelManager(this);
+        player = new Player(200,0, levelManager);
         enemyManager = new EnemyManager(player,levelManager);
         camera = new Camera2D(player,levelManager,enemyManager);
         pauseOverlay = new PauseOverlay(this);
+        levelCompleteOverlay = new LevelCompleteOverlay(this);
     }
     public void unpause() {
         paused = false;
+    }
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+    public EnemyManager getEnemyManager(){
+        return enemyManager;
+    }
+    public void setLevelComplete(Boolean levelComplete){
+        this.levelComplete = levelComplete;
+    }
+    public Player getPlayer() {
+        return player;
     }
     @Override
     public void update(float delta) {
         if (paused) {
             pauseOverlay.update();
+        } else if (levelComplete) {
+            levelCompleteOverlay.update();
         } else {
-            player.update(delta);
+            levelManager.update();
             enemyManager.update(delta);
             camera.update();
+            player.update(delta);
         }
-    }
 
+    }
+    public void resetAll(){
+        enemyManager.removeAll();
+        player.resetPlayer(levelManager.getCurrentLevel().getPlayerSpawnPointX(),levelManager.getCurrentLevel().getPlayerSpawnPointY());
+    }
+    public void replay(){
+        enemyManager.removeAll();
+        player.resetPlayer(levelManager.getCurrentLevel().getPlayerSpawnPointX(),levelManager.getCurrentLevel().getPlayerSpawnPointY());
+        enemyManager.setSpawnPoint(levelManager.getCurrentLevel().getEnemySpawnPoints());
+        enemyManager.addBlueGolem();
+    }
     @Override
     public void render(Graphics g) {
         camera.render(g);
         if (paused) {
             pauseOverlay.render(g);
+        } else if (levelComplete) {
+            levelCompleteOverlay.render(g);
         }
     }
 
@@ -57,6 +90,8 @@ public class Playing implements StateMethods{
     public void MousePressed(MouseEvent e) {
         if (paused){
             pauseOverlay.mousePressed(e);
+        } else if (levelComplete) {
+            levelCompleteOverlay.MousePressed(e);
         }
     }
 
@@ -64,6 +99,8 @@ public class Playing implements StateMethods{
     public void MouseReleased(MouseEvent e) {
         if (paused){
             pauseOverlay.mouseReleased(e);
+        } else if (levelComplete) {
+            levelCompleteOverlay.MouseReleased(e);
         }
     }
 
@@ -71,6 +108,8 @@ public class Playing implements StateMethods{
     public void MouseMoved(MouseEvent e) {
         if (paused){
             pauseOverlay.mouseMoved(e);
+        } else if (levelComplete) {
+            levelCompleteOverlay.MouseMove(e);
         }
     }
 

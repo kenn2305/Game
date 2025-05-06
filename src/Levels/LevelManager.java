@@ -1,18 +1,32 @@
 package Levels;
 
+import GameState.GameState;
+import GameState.Playing;
 import Player.Player;
 import utilz.LoadSave;
 import Game.Game;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class LevelManager {
     private BufferedImage[] level_sprites;
-    private Level test_level;
-    private Player player;
-    public LevelManager() {
+    private ArrayList<Level> levels;
+    private int index = 0;
+    private Playing playing;
+    public LevelManager(Playing playing) {
         loadLevelSprite();
-        test_level = new Level(LoadSave.TEST_LEVEL_DATA);
+        levels = new ArrayList<>();
+        this.playing = playing;
+        loadAllLevels();
+    }
+    private void loadAllLevels(){
+        Level level_1 = new Level(LoadSave.LEVEL_1,200,0,1);
+        levels.add(level_1);
+        Level level_2 = new Level(LoadSave.LEVEL_2,200,0,1);
+        levels.add(level_2);
+        Level level_3 = new Level(LoadSave.LEVEL_3,200,0,1);
+        levels.add(level_3);
     }
 
     private void loadLevelSprite(){
@@ -27,14 +41,38 @@ public class LevelManager {
             }
         }
     }
-    public Level getCurrentLevel() {
-        return test_level;
+    public void completeLevel(){
+        if (playing.getPlayer().getEnemy_kill_num() >= levels.get(index).getMisson()){
+            playing.setLevelComplete(true);
+        } else {
+            playing.setLevelComplete(false);
+        }
+        System.out.println(levels.get(index).getEnemySpawnPoints().size());
     }
-
+    public void loadNextLevel(){
+        if (!playing.gameComplete) {
+            index++;
+        }
+        if ( index >= levels.size() ){
+            index = 0;
+            GameState.state = GameState.MENU;
+            playing.gameComplete = true;
+        }
+        playing.resetAll();
+        playing.setLevelComplete(false);
+        playing.getEnemyManager().setSpawnPoint(levels.get(index).getEnemySpawnPoints());
+        playing.getEnemyManager().addBlueGolem();
+        if (playing.gameComplete){
+            playing.gameComplete = false;
+        }
+    }
+    public Level getCurrentLevel() {
+        return levels.get(index);
+    }
     public BufferedImage getTileGrid(int index){
         return level_sprites[index];
     }
-    public void setPlayer(Player player){
-        this.player = player;
+    public void update(){
+        completeLevel();
     }
 }

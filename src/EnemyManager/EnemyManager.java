@@ -1,6 +1,7 @@
 package EnemyManager;
 
 import BlueGolem.BlueGolem;
+import Game.Game;
 import Items.Hamburger;
 import Items.Items;
 import Items.Potion;
@@ -14,52 +15,69 @@ import java.util.Random;
 
 public class EnemyManager {
     private Player player;
-    private LevelManager level;
+    private LevelManager levelManager;
     private ObjecManager objManager;
     private ArrayList<BlueGolem> blueGolems;
-    private float spawnTimer = 0.0f; private ArrayList<int[]> spawnPoint;
+    private float spawnTimer = 0.0f; private ArrayList<Point> spawnPoint;
+    private final ArrayList<BlueGolem> toRemove = new ArrayList<>();
     private Random rand = new Random();
-    public EnemyManager(Player player, LevelManager level) {
+    private Boolean spawned = false;
+    public EnemyManager(Player player, LevelManager levelManager) {
         this.player = player;
-        this.level = level;
+        this.levelManager = levelManager;
         blueGolems = new ArrayList<>();
         spawnPoint = new ArrayList<>();
         rand = new Random();
         objManager = new ObjecManager(player);
-        spawnPoint.add(new int[]{469,569});
-        spawnPoint.add(new int[]{77,804});
-        spawnPoint.add(new int[]{2072,1044});
+        spawnPoint = levelManager.getCurrentLevel().getEnemySpawnPoints();
+        addBlueGolem();
     }
     public void update(float delta) {
-        addBlueGolem(delta);
-        for (BlueGolem blueGolem : blueGolems) {
+        updateBlueGolem(delta);
+        for (BlueGolem blueGolem : new ArrayList<>(blueGolems) ) {
             blueGolem.update(delta);
         }
-        objManager.update(delta);
         removeBlueGolem();
+        objManager.update(delta);
     }
     public void render(Graphics g , int offsetX , int offsetY) {
-        for (BlueGolem blueGolem : blueGolems) {
+        ArrayList<BlueGolem> copy = new ArrayList<>(blueGolems);
+        for (BlueGolem blueGolem : copy) {
             blueGolem.render(g, offsetX, offsetY);
         }
         objManager.render(g, offsetX, offsetY);
     }
-    private void addBlueGolem(float delta) {
-        spawnTimer += delta * 2;
-        if (spawnTimer > 5.0f && blueGolems.size() < 5) {
-            int index = rand.nextInt(spawnPoint.size());
-            int[] spawn = spawnPoint.get(index);
-            BlueGolem blueGolem = new BlueGolem(spawn[0], spawn[1], level, player);
+    public void addBlueGolem() {
+        if (spawned) return;
+        for (Point point : spawnPoint) {
+            int x = (int) (point.x * Game.GAME_SCALE * 2);
+            int y = (int) (point.y * Game.GAME_SCALE * 2);
+            BlueGolem blueGolem = new BlueGolem(x, y + 25 , levelManager, player);
             blueGolems.add(blueGolem);
-            spawnTimer = 0.0f;
         }
+        spawned = true;
     }
 
+    private void updateBlueGolem(float delta){
+        spawnTimer += delta * 2;
+        if (blueGolems.size() < spawnPoint.size()){
+            if (spawnTimer > 60.0f) {
+                int index = rand.nextInt(spawnPoint.size());
+                Point point = spawnPoint.get(index);
+                int x = (int) (point.x * Game.GAME_SCALE * 2);
+                int y = (int) (point.y * Game.GAME_SCALE * 2);
+                BlueGolem blueGolem = new BlueGolem(x, y + 25 , levelManager, player);
+                blueGolems.add(blueGolem);
+            }
+        }
+    }
     private void removeBlueGolem() {
+        toRemove.clear();
         for (int i = blueGolems.size() - 1; i >= 0; i--) {
             BlueGolem g = blueGolems.get(i);
             if (g.getFinisedDeath()) {
-                int random = rand.nextInt(3);
+                player.setEnemy_kill_num(player.getEnemy_kill_num() + 1);
+                int random = rand.nextInt(4);
                 if (random == 0) {
                     objManager.addPotion("BLUE",g.getBounds().x + g.getBounds().width / 2,
                             g.getBounds().y + g.getBounds().height / 2);
@@ -70,9 +88,19 @@ public class EnemyManager {
                     objManager.addHamburger("HAMBURGER",g.getBounds().x + g.getBounds().width / 2,
                             g.getBounds().y + g.getBounds().height / 2);
                 }
-                blueGolems.remove(i);
+                toRemove.add(g);
             }
         }
+        blueGolems.removeAll(toRemove);
     }
-
+    public void removeAll() {
+        toRemove.clear();
+        blueGolems.clear();
+        spawnPoint.clear();
+        objManager.removeAll();
+        spawned = false;
+    }
+    public void setSpawnPoint(ArrayList<Point> spawnPoint) {
+        this.spawnPoint = spawnPoint;
+    }
 }

@@ -56,5 +56,8 @@ public class ObjecManager {
             potion.render(g, offsetX, offsetY);
         }
     }
-
+    public void removeAll() {
+        hamburgers.clear();
+        Potions.clear();
+    }
 }

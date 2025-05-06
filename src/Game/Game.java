@@ -11,8 +11,6 @@ public class Game {
     public final static int GAME_WIDTH = TILE_IN_WIDTH * TILE_SIZE;
     public final static int GAME_HEIGHT = TILE_IN_HEIGHT * TILE_SIZE;
     public final static int MAP_TILE_SIZE = TILE_SIZE * 2;
-    public final static int MAP_WIDTH = MAP_TILE_SIZE * TILE_IN_WIDTH;
-    public final static int MAP_HEIGHT = MAP_TILE_SIZE * TILE_IN_HEIGHT;
     public Game(){
         GameController gameController = new GameController();
         Physics_Process p = new Physics_Process(gameController);

@@ -5,7 +5,7 @@ import java.awt.*;
 public class Physics {
     public static final int Gravity = 1000;
     public static final int Velocity = 1000;
-    public static final int Force = 2000;
+    public static final int Force = 2450;
 
     public static final int WANDER_VELOCITY = 150;
     public static final int CHASING_VELOCITY = 300;

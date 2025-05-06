@@ -127,6 +127,8 @@ public class PauseOverlay {
         } else if (isIn(e,replayB)) {
             if (replayB.getMousePressed()) {
                 replayB.setMousePressed(false);
+                playing.replay();
+                playing.unpause();
             }
         } else if (isIn(e,unpauseB)) {
             if (unpauseB.getMousePressed()) {
