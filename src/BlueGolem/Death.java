@@ -13,6 +13,7 @@ public class Death extends BlueGolemState{
 
     @Override
     protected void onEnter() {
+        blueGolem.active = true;
         System.out.println("Death");
         playAnimation(Constants.BlueGolemConstants.DIE, Constants.BlueGolemAniConstants.DIE);
         aniSpeed = 8;

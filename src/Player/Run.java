@@ -30,6 +30,9 @@ public class Run extends PlayerState {
     }
 
     public void updateState(float delta) {
+        if (player.die){
+            playerStateMachine.Change_to_next_state(playerStateMachine.Die);
+        }
         if (!player.getLeft() && !player.getRight()){
             playerStateMachine.Change_to_next_state(playerStateMachine.Idle);
             return;

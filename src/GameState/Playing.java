@@ -4,6 +4,8 @@ import Camera.Camera2D;
 import EnemyManager.EnemyManager;
 import Levels.LevelManager;
 import Player.Player;
+import ui.GameCompletedOverlay;
+import ui.GameOverOverlay;
 import ui.LevelCompleteOverlay;
 import ui.PauseOverlay;
 
@@ -13,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class Playing implements StateMethods{
+    public Boolean gameComplete = false;
     private LevelManager levelManager;
     private Player player;
     private Camera2D camera;
@@ -20,8 +23,10 @@ public class Playing implements StateMethods{
     private Boolean paused = false;
     private PauseOverlay pauseOverlay;
     private LevelCompleteOverlay levelCompleteOverlay;
+    private GameCompletedOverlay gameCompletedOverlay;
+    private GameOverOverlay gameOverOverlay;
     private Boolean levelComplete = false;
-    public Boolean gameComplete = false;
+    private Boolean gameOver = false;
     public Playing() {
         levelManager = new LevelManager(this);
         player = new Player(200,0, levelManager);
@@ -29,6 +34,8 @@ public class Playing implements StateMethods{
         camera = new Camera2D(player,levelManager,enemyManager);
         pauseOverlay = new PauseOverlay(this);
         levelCompleteOverlay = new LevelCompleteOverlay(this);
+        gameCompletedOverlay = new GameCompletedOverlay(this);
+        gameOverOverlay = new GameOverOverlay(this);
     }
     public void unpause() {
         paused = false;
@@ -47,21 +54,29 @@ public class Playing implements StateMethods{
     }
     @Override
     public void update(float delta) {
-        if (paused) {
-            pauseOverlay.update();
-        } else if (levelComplete) {
-            levelCompleteOverlay.update();
+        gameOver = player.getGameOver();
+        if(gameOver){
+            gameOverOverlay.update();
         } else {
-            levelManager.update();
-            enemyManager.update(delta);
-            camera.update();
-            player.update(delta);
+            if (paused) {
+                pauseOverlay.update();
+            } else if (gameComplete) {
+                gameCompletedOverlay.update();
+            } else if (levelComplete) {
+                levelCompleteOverlay.update();
+            } else {
+                levelManager.update();
+                enemyManager.update(delta);
+                camera.update();
+                player.update(delta);
+            }
         }
-
+        System.out.println(gameOver);
     }
     public void resetAll(){
         enemyManager.removeAll();
         player.resetPlayer(levelManager.getCurrentLevel().getPlayerSpawnPointX(),levelManager.getCurrentLevel().getPlayerSpawnPointY());
+        gameOver = false;
     }
     public void replay(){
         enemyManager.removeAll();
@@ -72,44 +87,68 @@ public class Playing implements StateMethods{
     @Override
     public void render(Graphics g) {
         camera.render(g);
-        if (paused) {
-            pauseOverlay.render(g);
-        } else if (levelComplete) {
-            levelCompleteOverlay.render(g);
+        if (gameOver){
+            gameOverOverlay.render(g);
+        } else {
+            if (paused) {
+                pauseOverlay.render(g);
+            } else if (gameComplete) {
+                gameCompletedOverlay.render(g);
+            } else if (levelComplete) {
+                levelCompleteOverlay.render(g);
+            }
         }
     }
 
     @Override
     public void MouseDragged(MouseEvent e) {
-        if (paused) {
+        if (paused && !gameOver) {
             pauseOverlay.mouseDragged(e);
         }
     }
 
     @Override
     public void MousePressed(MouseEvent e) {
-        if (paused){
-            pauseOverlay.mousePressed(e);
-        } else if (levelComplete) {
-            levelCompleteOverlay.MousePressed(e);
+        if (gameOver){
+            gameOverOverlay.MousePressed(e);
+        } else {
+            if (paused) {
+                pauseOverlay.mousePressed(e);
+            } else if (levelComplete) {
+                levelCompleteOverlay.MousePressed(e);
+            } else if (gameComplete) {
+                gameCompletedOverlay.MousePressed(e);
+            }
         }
     }
 
     @Override
     public void MouseReleased(MouseEvent e) {
-        if (paused){
-            pauseOverlay.mouseReleased(e);
-        } else if (levelComplete) {
-            levelCompleteOverlay.MouseReleased(e);
+        if (gameOver){
+            gameOverOverlay.MouseReleased(e);
+        } else {
+            if (paused) {
+                pauseOverlay.mouseReleased(e);
+            } else if (levelComplete) {
+                levelCompleteOverlay.MouseReleased(e);
+            } else if (gameComplete) {
+                gameCompletedOverlay.MouseReleased(e);
+            }
         }
     }
 
     @Override
     public void MouseMoved(MouseEvent e) {
-        if (paused){
-            pauseOverlay.mouseMoved(e);
-        } else if (levelComplete) {
-            levelCompleteOverlay.MouseMove(e);
+        if (gameOver){
+            gameOverOverlay.MouseMove(e);
+        } else {
+            if (paused) {
+                pauseOverlay.mouseMoved(e);
+            } else if (levelComplete) {
+                levelCompleteOverlay.MouseMove(e);
+            } else if (gameComplete) {
+                gameCompletedOverlay.MouseMove(e);
+            }
         }
     }
 

@@ -40,6 +40,9 @@ public class DoubleJump extends PlayerState {
     }
 
     private void updateState(float delta) {
+        if (player.die){
+            playerStateMachine.Change_to_next_state(playerStateMachine.Die);
+        }
         float newVelY = Maths.Lerp(player.getVelY(), Physics.Gravity * 2, delta * 5);
         player.setVelY(newVelY);
         if (player.getAttack()){

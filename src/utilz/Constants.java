@@ -2,7 +2,15 @@ package utilz;
 
 import Game.Game;
 
+import java.awt.*;
+
 public class Constants {
+    public static class Background{
+        public static final int BACKGROUND_COLOR_DEFAULT_WIDTH = 320;
+        public static final int BACKGROUND_COLOR_DEFAULT_HEIGHT = 180;
+        public static final int BACKGROUND_COLOR_WIDTH = (int) (320 * Game.GAME_SCALE * 1.5f);
+        public static final int BACKGROUND_COLOR_HEIGHT = (int) (180 * Game.GAME_SCALE * 1.5f);
+    }
     public static class MenuButton{
         public static final int MENU_BUTTON_DEFAULT_WIDTH = 69;
         public static final int MENU_BUTTON_DEFAULT_HEIGHT = 21;
@@ -41,6 +49,7 @@ public class Constants {
         public static final int ATTACK_1 = 4;
         public static final int ATTACK_2 = 5;
         public static final int AIR_ATTACK = 6;
+        public static final int DEATH = 7;
     }
 
     public static class PlayerAniConstants {
@@ -51,6 +60,7 @@ public class Constants {
         public static final int ATTACK_1 = 5;
         public static final int ATTACK_2 = 6;
         public static final int AIR_ATTACK = 6;
+        public static final int DEATH = 9;
     }
 
     public static class BlueGolemConstants {

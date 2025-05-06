@@ -5,9 +5,12 @@ import EnemyManager.EnemyManager;
 import Player.Player;
 import Game.Game;
 import Levels.LevelManager;
+import utilz.Constants;
+import utilz.LoadSave;
 import utilz.Maths;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +25,9 @@ public class Camera2D {
     private EnemyManager enemyManager;
     private LevelManager level;
     private int offsetX, offsetY;
-    private Boolean firstFrame = true;
+    private BufferedImage background;
+    private BufferedImage treefront;
+    private BufferedImage treeback;
     public Camera2D(Player player , LevelManager level , EnemyManager enemyManager) {
         System.out.println(maxX + " " + maxY);
         this.player = player;
@@ -34,13 +39,31 @@ public class Camera2D {
         maxY = level.getCurrentLevel().getMap_height()- height;
         xLimit = Game.GAME_WIDTH / 2;
         yLimit = Game.GAME_HEIGHT / 2;
+        InitBackGround();
     }
-
+    private void InitBackGround(){
+        background = LoadSave.loadImage(LoadSave.BACKGROUND_COLOR);
+        treeback = LoadSave.loadImage(LoadSave.TREE_BACK);
+        treefront = LoadSave.loadImage(LoadSave.TREE_FRONT);
+    }
+    private void renderBackground(Graphics g, int offsetX, int offsetY){
+        g.drawImage(background,0,0, (int) (Constants.Background.BACKGROUND_COLOR_WIDTH * 2),
+                (int) (Constants.Background.BACKGROUND_COLOR_HEIGHT * 2),null);
+        for ( int i = 0 ; i < 3 ; ++i) {
+            g.drawImage(treeback, (int) (i * (int) (Constants.Background.BACKGROUND_COLOR_WIDTH * 2) - offsetX), 0, (int) (Constants.Background.BACKGROUND_COLOR_WIDTH * 2),
+                    (int) (Constants.Background.BACKGROUND_COLOR_HEIGHT * 2), null);
+        }
+        for ( int i = 0 ; i < 3 ; ++i) {
+            g.drawImage(treefront, (int) (i * (int) (Constants.Background.BACKGROUND_COLOR_WIDTH * 2) - offsetX * 0.8), 0, (int) (Constants.Background.BACKGROUND_COLOR_WIDTH * 2),
+                    (int) (Constants.Background.BACKGROUND_COLOR_HEIGHT * 2), null);
+        }
+    }
     public void update() {
         CameraFollowPlayer();
     }
 
     public void render(Graphics g) {
+        renderBackground(g, offsetX, offsetY);
         DrawMapInViewPort(g);
         DebugBox(g);
         DebugHitBox(g);

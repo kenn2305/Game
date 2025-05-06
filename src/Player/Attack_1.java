@@ -34,6 +34,9 @@ public class Attack_1 extends PlayerState{
     }
 
     private void updateState(float delta) {
+        if (player.die){
+            playerStateMachine.Change_to_next_state(playerStateMachine.Die);
+        }
         if (aniFrame >= 3){
             player.setHitbox_active(true);
         } else {

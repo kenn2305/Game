@@ -21,11 +21,11 @@ public class LevelManager {
         loadAllLevels();
     }
     private void loadAllLevels(){
-        Level level_1 = new Level(LoadSave.LEVEL_1,200,0,1);
+        Level level_1 = new Level(LoadSave.LEVEL_1,200,50,10);
         levels.add(level_1);
-        Level level_2 = new Level(LoadSave.LEVEL_2,200,0,1);
+        Level level_2 = new Level(LoadSave.LEVEL_2,0,0,10);
         levels.add(level_2);
-        Level level_3 = new Level(LoadSave.LEVEL_3,200,0,1);
+        Level level_3 = new Level(LoadSave.LEVEL_3,200,50,10);
         levels.add(level_3);
     }
 
@@ -42,26 +42,27 @@ public class LevelManager {
         }
     }
     public void completeLevel(){
-        if (playing.getPlayer().getEnemy_kill_num() >= levels.get(index).getMisson()){
+        if (playing.getPlayer().getEnemy_kill_num() >= levels.get(index).getMisson() && index < levels.size() - 1){
             playing.setLevelComplete(true);
+            playing.gameComplete = false;
+        } else if (playing.getPlayer().getEnemy_kill_num() >= levels.get(index).getMisson() && index >= levels.size() - 1){
+            playing.setLevelComplete(false);
+            playing.gameComplete = true;
         } else {
             playing.setLevelComplete(false);
+            playing.gameComplete = false;
         }
-        System.out.println(levels.get(index).getEnemySpawnPoints().size());
     }
     public void loadNextLevel(){
-        if (!playing.gameComplete) {
-            index++;
-        }
-        if ( index >= levels.size() ){
+        index++;
+        if ( index >= levels.size()){
             index = 0;
-            GameState.state = GameState.MENU;
-            playing.gameComplete = true;
         }
         playing.resetAll();
         playing.setLevelComplete(false);
         playing.getEnemyManager().setSpawnPoint(levels.get(index).getEnemySpawnPoints());
         playing.getEnemyManager().addBlueGolem();
+
         if (playing.gameComplete){
             playing.gameComplete = false;
         }
@@ -74,5 +75,8 @@ public class LevelManager {
     }
     public void update(){
         completeLevel();
+    }
+    public void resetIndexWhenGameOver(){
+        index = 0;
     }
 }

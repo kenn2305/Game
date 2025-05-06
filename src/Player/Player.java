@@ -27,6 +27,7 @@ public class Player extends Entity {
     private float currentHealth = maxHealth;
     private int maxHealthBarWidth = (int) (200 * Game.GAME_SCALE * 1.5);
     private int currentHealthBarWidth = maxHealthBarWidth;
+    protected Boolean die = false; protected Boolean gameOver = false;
     private Boolean hurt = false;
     //Effect from items
     protected float damageScale = 0; protected float timeDamageScale; protected Boolean damageApplied = false;
@@ -184,6 +185,10 @@ public class Player extends Entity {
             currentHealth = maxHealth;
         } else if (currentHealth < 0){
             currentHealth = 0;
+        }
+
+        if (currentHealth <= 0){
+            die = true;
         }
     }
     private void updateHealthBar(){
@@ -396,5 +401,12 @@ public class Player extends Entity {
         enemy_kill_num = 0;
         damageScale = 0;
         speedScale = 0;
+        gameOver = false;
+        die = false;
+        stateMachine.resetState();
+        Direction = 1;
+    }
+    public Boolean getGameOver() {
+        return gameOver;
     }
 }

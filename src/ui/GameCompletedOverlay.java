@@ -10,12 +10,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class LevelCompleteOverlay {
+public class GameCompletedOverlay {
     private Playing playing;
     private UrmButtom menuButton, nextButton;
     private BufferedImage img;
     private int bgX, bgY, bgW, bgH;
-    public LevelCompleteOverlay(Playing playing) {
+    public GameCompletedOverlay(Playing playing) {
         this.playing = playing;
         initImage();
         initButton();
@@ -26,10 +26,10 @@ public class LevelCompleteOverlay {
         int nextX = (int) (bgX + (72 * Game.GAME_SCALE * 2.5));
         int menuY = (int) (bgY + (57 * Game.GAME_SCALE * 2.5));
         menuButton = new UrmButtom(menuX,menuY, Constants.URMButton.URM_SIZE_WIDTH, Constants.URMButton.URM_SIZE_HEIGHT,2);
-        nextButton = new UrmButtom(nextX,menuY,Constants.URMButton.URM_SIZE_WIDTH, Constants.URMButton.URM_SIZE_HEIGHT,0);
+        nextButton = new UrmButtom(nextX,menuY,Constants.URMButton.URM_SIZE_WIDTH, Constants.URMButton.URM_SIZE_HEIGHT,1);
     }
     private void initImage() {
-        img = LoadSave.loadImage(LoadSave.COMPLETE_IMG);
+        img = LoadSave.loadImage(LoadSave.GAME_COMPLETE);
         bgW = (int) (img.getWidth() * Game.GAME_SCALE * 2.5);
         bgH = (int) (img.getHeight() * Game.GAME_SCALE * 2.5);
         bgX = Game.GAME_WIDTH / 2 - bgW/ 2;
@@ -56,9 +56,9 @@ public class LevelCompleteOverlay {
     }
     public void MousePressed(MouseEvent e) {
         if (isIn(nextButton,e)){
-           nextButton.setMousePressed(true);
+            nextButton.setMousePressed(true);
         } else if (isIn(menuButton,e)){
-           menuButton.setMousePressed(true);
+            menuButton.setMousePressed(true);
         }
     }
     public void MouseReleased(MouseEvent e) {

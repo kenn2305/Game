@@ -10,17 +10,20 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.List;
 
 public class LoadSave {
+    public static final String BACKGROUND_COLOR = "Background.png";
+    public static final String TREE_BACK = "Tree_back.png";
+    public static final String TREE_FRONT = "Tree_front.png";
+    public static final String FONT = "m6x11plus.ttf";
     public static final String LEVEL_1 = "level1.tmx";
     public static final String LEVEL_2 = "level2.tmx";
     public static final String LEVEL_3 = "level3.tmx";
     public static final String TILE_MAP_DATA = "Assets.png";
-    public static final String Background_1 = "Background_1.png";
-    public static final String Background_2 = "Background_2.png";
     public static final String PLAYER = "Fbk.png";
     public static final String BLUEGOLEM = "BlueGolem.png";
     public static final String GOLDGOLEM = "GoldGolem.png";
@@ -29,13 +32,15 @@ public class LoadSave {
     public static final String FBK_ICON = "FbkIcon.png";
     public static final String MENU_BUTTON = "MenuButtons.png";
     public static final String MENU_BUTTON_BACKGROUND = "menu_background.png";
-    public static final String MENU_BACKGROUND = "background.png";
+    public static final String MENU_BACKGROUND = "MenuBackGround.png";
     public static final String PAUSE_BACKGROUND = "pause_background.png";
     public static final String SOUND_BUTTON = "sound_button.png";
     public static final String URM_BUTTOM = "urm_button.png";
     public static final String VOLUME = "volumn_num.png";
     public static final String SLIDER = "slider.png";
     public static final String COMPLETE_IMG = "levelcompletebackgorund.png";
+    public static final String GAME_COMPLETE = "gameCompleted.png";
+    public static final String GAME_OVER = "gameOver.png";
     public static BufferedImage loadImage(String filename) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/res/" + filename);
@@ -147,5 +152,20 @@ public class LoadSave {
             e.printStackTrace();
         }
         return info;
+    }
+
+    public static Font LoadFont(String filename) {
+        Font font;
+        try{
+            InputStream is = LoadSave.class.getResourceAsStream("/res/" + filename);
+            font = Font.createFont(Font.TRUETYPE_FONT, is);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(font);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (FontFormatException e) {
+            throw new RuntimeException(e);
+        }
+        return font;
     }
 }

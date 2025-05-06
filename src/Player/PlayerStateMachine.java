@@ -10,7 +10,7 @@ public class PlayerStateMachine extends StateMachine {
     private PlayerState currentPlayerState;
     protected Run Running;protected Idle Idle;protected Fall Fall;protected Jump Jump;
     protected DoubleJump DoubleJump;protected Attack_1 Attack_1;protected Attack_2 Attack_2;
-    protected Air_Attack Air_Attack;
+    protected Air_Attack Air_Attack; protected Die Die;
     public PlayerStateMachine(Player player, LevelManager levelManager) {
         super(levelManager);
         this.player = player;
@@ -22,6 +22,7 @@ public class PlayerStateMachine extends StateMachine {
         Attack_1 = new Attack_1(player,this,levelManager);
         Attack_2 = new Attack_2(player,this,levelManager);
         Air_Attack = new Air_Attack(player,this,levelManager);
+        Die = new Die(player,this,levelManager);
         currentPlayerState = Fall;
         currentPlayerState.onEnter();
     }
@@ -41,5 +42,8 @@ public class PlayerStateMachine extends StateMachine {
         }
         this.currentPlayerState = nextPlayerState;
         this.currentPlayerState.onEnter();
+    }
+    public void resetState() {
+        currentPlayerState = Fall;
     }
 }

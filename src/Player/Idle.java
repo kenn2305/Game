@@ -28,6 +28,7 @@ public class Idle extends PlayerState {
     protected void onEnter() {
         playAnimation(Constants.PlayerConstants.IDLE, Constants.PlayerAniConstants.IDLE);
         aniSpeed = 10;
+        player.die = false;
         player.setDouble_jump(false);
         player.setHitbox_active(false);
         player.setFinishedAttack(false);
@@ -40,6 +41,10 @@ public class Idle extends PlayerState {
     }
 
     private void updateState(float delta){
+        if (player.die){
+            playerStateMachine.Change_to_next_state(playerStateMachine.Die);
+            return;
+        }
         if (!player.getLeft() && !player.getRight()) {
             float newVelX = Maths.Lerp(player.getVelX(), 0.0f, delta * 100);
             player.setVelX(newVelX);

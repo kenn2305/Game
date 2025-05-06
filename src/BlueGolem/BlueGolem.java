@@ -5,14 +5,18 @@
     import Levels.LevelManager;
     import Player.Player;
     import Ray.Ray;
+    import org.w3c.dom.Text;
+    import ui.TextDame;
     import utilz.LoadSave;
     import utilz.Maths;
 
     import java.awt.*;
     import java.awt.image.BufferedImage;
+    import java.util.ArrayList;
     import java.util.Random;
 
     public class BlueGolem extends Entity {
+        protected Boolean active = false;
         protected float maxHealth = 250; protected float currentHealth;
         protected float damage = 30;
         protected Random rand;
@@ -26,6 +30,7 @@
         private Boolean hitplayer = false;
         protected float attackCooldown = 1.0f; // Thời gian chờ giữa các lần tấn công (giây)
         protected float attackTimer = 0.0f;
+        private TextDame tmp;
         enum State {
             IDLE,
             WANDER;
@@ -39,10 +44,10 @@
         private int icon;
         private int maxHealthBar = 72;
         private int heathWidth = maxHealthBar;
-
         private float displayTime = 6.0f;
         private float displayTimer = 0.0f;
         private Boolean display = false;
+        private ArrayList<TextDame> textDames;
         public BlueGolem(float x, float y, LevelManager levelManager , Player player) {
             super(x, y, levelManager);
             this.player = player;
@@ -57,6 +62,7 @@
             states = State.WANDER;
             blueGolemStateMachine = new BlueGolemStateMachine(this, levelManager);
             ray = new Ray(levelManager);
+            textDames = new ArrayList<>();
         }
         private void loadSpriteSheet() {
             sprite_sheet = LoadSave.loadImage(LoadSave.BLUEGOLEM);
@@ -128,7 +134,7 @@
                 }
             }
             if (player.getHitbox().intersects(collisionBox)){
-                if (player.getHitbox_active() && hurtTimer <= 0){
+                if (player.getHitbox_active() && hurtTimer <= 0 && !active){
                     hurt = true;
                     hurtTimer = hurtCooldown;
                     currentHealth -= player.getDame();
@@ -139,6 +145,9 @@
                     } else {
                         Direction = 1;
                     }
+                     tmp = new TextDame(collisionBox.x,
+                            collisionBox.y + collisionBox.height / 2 , 30, (int) player.getDame());
+                    textDames.add(tmp);
                 } else {
                     hurt = false;
                 }
@@ -216,6 +225,19 @@
             }
             return false;
         }
+        private void updateTextDame(float delta){
+            for (TextDame tmp : new ArrayList<>(textDames)) {
+                tmp.update(delta);
+            }
+        }
+        private void removeTextDame(){
+            for ( int i = textDames.size() - 1; i >= 0; i--){
+                TextDame tmp2 = textDames.get(i);
+                if (tmp2.opacity == 0){
+                    textDames.remove(i);
+                }
+            }
+        }
         public void update(float delta) {
             super.update(delta);
             blueGolemStateMachine.update(delta);
@@ -224,6 +246,8 @@
             updateRayCastFloor();
             stateUpdate(delta);
             updateHealthBar();
+            removeTextDame();
+            updateTextDame(delta);
         }
         private void updateHealthBar(){
             heathWidth = (int)((currentHealth / (float)maxHealth) * maxHealthBar);
@@ -240,6 +264,9 @@
             HealthBar(g , offsetX , offsetY);
             Debug(g,offsetX,offsetY);
             blueGolemStateMachine.render(g, offsetX, offsetY);
+            for (TextDame tmp : new ArrayList<>(textDames)) {
+                tmp.render(g, offsetX, offsetY);
+            }
         }
         public void Debug(Graphics g, int offsetX, int offsetY) {
             g.setColor(hitboxColor);
