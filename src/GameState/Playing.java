@@ -2,21 +2,21 @@ package GameState;
 
 import Camera.Camera2D;
 import EnemyManager.EnemyManager;
+import Game.*;
 import Levels.LevelManager;
+import ObjectManager.ObjecManager;
 import Player.Player;
-import ui.GameCompletedOverlay;
-import ui.GameOverOverlay;
-import ui.LevelCompleteOverlay;
-import ui.PauseOverlay;
+import ui.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Playing implements StateMethods{
+public class Playing extends State implements StateMethods{
     public Boolean gameComplete = false;
     private LevelManager levelManager;
+    private ObjecManager objecManager;
     private Player player;
     private Camera2D camera;
     private EnemyManager enemyManager;
@@ -27,11 +27,15 @@ public class Playing implements StateMethods{
     private GameOverOverlay gameOverOverlay;
     private Boolean levelComplete = false;
     private Boolean gameOver = false;
-    public Playing() {
+    private TextDamePool pool;
+    public Playing(GameController gameController) {
+        super(gameController);
+        this.pool = new TextDamePool(20);
         levelManager = new LevelManager(this);
-        player = new Player(200,0, levelManager);
-        enemyManager = new EnemyManager(player,levelManager);
-        camera = new Camera2D(player,levelManager,enemyManager);
+        player = new Player(200,0, levelManager,this);
+        objecManager = new ObjecManager(this);
+        enemyManager = new EnemyManager(this);
+        camera = new Camera2D(player,levelManager,enemyManager,pool);
         pauseOverlay = new PauseOverlay(this);
         levelCompleteOverlay = new LevelCompleteOverlay(this);
         gameCompletedOverlay = new GameCompletedOverlay(this);
@@ -69,9 +73,9 @@ public class Playing implements StateMethods{
                 enemyManager.update(delta);
                 camera.update();
                 player.update(delta);
+                pool.update(delta);
             }
         }
-        System.out.println(gameOver);
     }
     public void resetAll(){
         enemyManager.removeAll();
@@ -83,6 +87,12 @@ public class Playing implements StateMethods{
         player.resetPlayer(levelManager.getCurrentLevel().getPlayerSpawnPointX(),levelManager.getCurrentLevel().getPlayerSpawnPointY());
         enemyManager.setSpawnPoint(levelManager.getCurrentLevel().getEnemySpawnPoints());
         enemyManager.addBlueGolem();
+    }
+    public ObjecManager getObjecManager() {
+        return objecManager;
+    }
+    public TextDamePool getPool() {
+        return pool;
     }
     @Override
     public void render(Graphics g) {

@@ -68,7 +68,7 @@ public class LevelCompleteOverlay {
             }
         } else if (isIn(menuButton,e)){
             if (menuButton.getMousePressed()){
-                GameState.state = GameState.MENU;
+                playing.setGameState(GameState.MENU);
             }
         }
         menuButton.resetBool();

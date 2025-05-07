@@ -48,7 +48,7 @@ public class PlayerState extends State {
     }
 
     protected void updateMovementInState(float delta) {
-        float velocityX = Physics.Velocity + Physics.Velocity * player.speedScale;
+        float velocityX = Physics.Velocity;
         if (player.getLeft() && !player.getRight()) {
             float newVelX = Maths.Lerp(player.getVelX(), -velocityX, delta * 10);
             player.setVelX(newVelX);

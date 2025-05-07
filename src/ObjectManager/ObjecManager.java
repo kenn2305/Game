@@ -1,6 +1,7 @@
 package ObjectManager;
 
 import BlueGolem.BlueGolem;
+import GameState.Playing;
 import Items.Hamburger;
 import Items.Potion;
 import Player.Player;
@@ -11,18 +12,18 @@ import java.util.ArrayList;
 public class ObjecManager {
     private ArrayList<Hamburger> hamburgers;
     private ArrayList<Potion> Potions;
-    private Player player;
-    public ObjecManager(Player player) {
-        this.player = player;
+    private Playing playing;
+    public ObjecManager(Playing playing) {
+        this.playing = playing;
         hamburgers = new ArrayList<>();
         Potions = new ArrayList<>();
     }
     public void addHamburger(String type, float x , float y) {
-        Hamburger hamburger = new Hamburger(x,y,type,player);
+        Hamburger hamburger = new Hamburger(x,y,type,playing);
         hamburgers.add(hamburger);
     }
     public void addPotion(String type, float x , float y) {
-        Potion potion = new Potion(x,y,type,player);
+        Potion potion = new Potion(x,y,type,playing);
         Potions.add(potion);
     }
     private void removeInactiveItems() {

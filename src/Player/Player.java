@@ -2,6 +2,7 @@ package Player;
 
 import Entities.Entity;
 import Game.Game;
+import GameState.Playing;
 import Levels.LevelManager;
 import utilz.LoadSave;
 
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
+    protected Playing playing;
     private BufferedImage player_sheet;
     private BufferedImage[][] animations;
     public Color bound_color;
@@ -23,25 +25,27 @@ public class Player extends Entity {
     private Rectangle Hitbox; private Boolean hitbox_active = false;
     //UI Healthbar, bla bla...
     private BufferedImage icon;
-    private float maxHealth = 150;
-    private float currentHealth = maxHealth;
-    private int maxHealthBarWidth = (int) (200 * Game.GAME_SCALE * 1.5);
-    private int currentHealthBarWidth = maxHealthBarWidth;
+    protected float maxHealth = 150;
+    protected float currentHealth = maxHealth;
+    protected int maxHealthBarWidth = (int) (200 * Game.GAME_SCALE * 1.5);
+    protected int currentHealthBarWidth = maxHealthBarWidth;
     protected Boolean die = false; protected Boolean gameOver = false;
     private Boolean hurt = false;
     //Effect from items
     protected float damageScale = 0; protected float timeDamageScale; protected Boolean damageApplied = false;
-    protected float speedScale = 0; protected float timeSpeedScale; protected Boolean speedApplied = false;
-    protected float heal; protected Boolean healApplied = false; protected Boolean getHeal = false;
+    protected float healScale = 0; protected float timeHealScale; protected Boolean healingApplied = false; protected int healInDameDeal;
+    protected float heal; protected Boolean healApplied = false; protected Boolean getHeal = false; protected Boolean healOnce = false;
+    protected Boolean getIntersect = false;
     //Kill enemy
     private int enemy_kill_num = 0;
-    public Player(float x, float y, LevelManager levelManager) {
+    public Player(float x, float y, LevelManager levelManager, Playing playing) {
         super(x, y, levelManager);
         this.stateMachine = new PlayerStateMachine(this, levelManager);
         InitPlayer();
         loadAnimations();
         InitBounds();
         InitHitbox();
+        this.playing = playing;
         hitbox_color = new Color(0, 0, 255, 130);
     }
     private void InitPlayer() {
@@ -103,21 +107,23 @@ public class Player extends Entity {
             damageApplied = false;
         }
 
-        if (speedApplied && timeSpeedScale > 0){
-            timeSpeedScale -= delta * 2;
+        if (healingApplied && timeHealScale > 0){
+            timeHealScale -= delta * 2;
         } else {
-            speedScale = 0;
-            speedApplied = false;
+            healScale = 0;
+            healingApplied = false;
         }
 
         if (healApplied && !getHeal){
             if (currentHealth < maxHealth){
                 currentHealth += heal;
                 getHeal = true;
+                healOnce = false;
             }
         } else {
             healApplied = false;
             getHeal = false;
+            heal = 0;
         }
     }
     private void attackProcess(){
@@ -190,13 +196,20 @@ public class Player extends Entity {
         if (currentHealth <= 0){
             die = true;
         }
+        System.out.println(currentHealth);
     }
     private void updateHealthBar(){
         currentHealthBarWidth = (int)((float)currentHealth/maxHealth * maxHealthBarWidth);
+        if (healInDameDeal != 0){
+            playing.getPool().spawnTextDame(collisionBox.x, collisionBox.y,(int)(damage * healScale) + "",Color.GREEN);
+        } else if (heal != 0 && !healOnce){
+            playing.getPool().spawnTextDame(collisionBox.x, collisionBox.y,(int)(heal) + "",Color.GREEN);
+            healOnce = true;
+        }
     }
 
     public void getDamageFromEnemy(float damage, Boolean hurt){
-        currentHealth -= damage;
+        currentHealth -= (damage - healScale * damage);
         this.hurt = hurt;
     }
     public void render(Graphics g , int offsetX , int offsetY) {
@@ -369,8 +382,8 @@ public class Player extends Entity {
     }
     public void applyEffectFromPotion(String item, float scale , float time) {
         if (item == "BLUE"){
-            speedScale = scale;
-            timeSpeedScale = time;
+            healScale = scale;
+            timeHealScale = time;
         } else if (item == "RED"){
             damageScale = scale;
             timeDamageScale = time;
@@ -382,8 +395,8 @@ public class Player extends Entity {
     public void setDamageApplied(Boolean damageApplied) {
         this.damageApplied = damageApplied;
     }
-    public void setSpeedApplied(Boolean speedApplied) {
-        this.speedApplied = speedApplied;
+    public void setHealingApplied(Boolean healingApplied) {
+        this.healingApplied = healingApplied;
     }
     public void setHealApplied(Boolean healApplied) {
         this.healApplied = healApplied;
@@ -400,7 +413,7 @@ public class Player extends Entity {
         currentHealth = maxHealth;
         enemy_kill_num = 0;
         damageScale = 0;
-        speedScale = 0;
+        healScale = 0;
         gameOver = false;
         die = false;
         stateMachine.resetState();
@@ -408,5 +421,8 @@ public class Player extends Entity {
     }
     public Boolean getGameOver() {
         return gameOver;
+    }
+    public void setGetIntersect(Boolean getIntersect) {
+        this.getIntersect = getIntersect;
     }
 }

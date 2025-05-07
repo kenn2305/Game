@@ -1,6 +1,7 @@
 package Items;
 
 import Game.Game;
+import GameState.Playing;
 import Player.Player;
 import utilz.Constants;
 import utilz.LoadSave;
@@ -19,13 +20,13 @@ public class Items {
     protected Boolean active = true;
     protected Boolean hoover = false; protected int hoverDir; protected int hooverOffset; protected float hoverTimer = 0.0f;
     protected float velocityY;
-    protected Player player;
     protected int items_index; protected int aniTime;
-    public Items(float x , float y , String type, Player player) {
+    protected Playing playing;
+    public Items(float x , float y , String type, Playing playing) {
         this.x = x;
         this.y = y;
         this.type = type;
-        this.player = player;
+        this.playing = playing;
         yMax = this.y;
         InitSheet();
         InitAnimation();

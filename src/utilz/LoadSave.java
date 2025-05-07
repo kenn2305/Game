@@ -43,7 +43,7 @@ public class LoadSave {
     public static final String GAME_OVER = "gameOver.png";
     public static BufferedImage loadImage(String filename) {
         BufferedImage image = null;
-        InputStream is = LoadSave.class.getResourceAsStream("/res/" + filename);
+        InputStream is = LoadSave.class.getResourceAsStream("/" + filename);
         try {
             image = ImageIO.read(is);
         } catch (Exception e) {
@@ -65,7 +65,7 @@ public class LoadSave {
         info.enemySpawnPoints = new ArrayList<>();
         info.PlayerSpawnPoint = new Point();
         try {
-            InputStream file = LoadSave.class.getResourceAsStream("/res/" + filename);
+            InputStream file = LoadSave.class.getResourceAsStream("/" + filename);
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(file);
@@ -157,7 +157,7 @@ public class LoadSave {
     public static Font LoadFont(String filename) {
         Font font;
         try{
-            InputStream is = LoadSave.class.getResourceAsStream("/res/" + filename);
+            InputStream is = LoadSave.class.getResourceAsStream("/" + filename);
             font = Font.createFont(Font.TRUETYPE_FONT, is);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(font);

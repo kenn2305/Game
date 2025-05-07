@@ -5,6 +5,7 @@ import EnemyManager.EnemyManager;
 import Player.Player;
 import Game.Game;
 import Levels.LevelManager;
+import ui.TextDamePool;
 import utilz.Constants;
 import utilz.LoadSave;
 import utilz.Maths;
@@ -28,7 +29,8 @@ public class Camera2D {
     private BufferedImage background;
     private BufferedImage treefront;
     private BufferedImage treeback;
-    public Camera2D(Player player , LevelManager level , EnemyManager enemyManager) {
+    private TextDamePool textDamePool;
+    public Camera2D(Player player , LevelManager level , EnemyManager enemyManager, TextDamePool pool) {
         System.out.println(maxX + " " + maxY);
         this.player = player;
         this.level = level;
@@ -40,6 +42,7 @@ public class Camera2D {
         xLimit = Game.GAME_WIDTH / 2;
         yLimit = Game.GAME_HEIGHT / 2;
         InitBackGround();
+        this.textDamePool = pool;
     }
     private void InitBackGround(){
         background = LoadSave.loadImage(LoadSave.BACKGROUND_COLOR);
@@ -134,6 +137,7 @@ public class Camera2D {
     private void drawPlayerInViewPort(Graphics g) {
         enemyManager.render(g,offsetX,offsetY);
         player.render(g,offsetX,offsetY);
+        textDamePool.render(g,offsetX,offsetY);
     }
     public float getOffsetX() {
         return offsetX;

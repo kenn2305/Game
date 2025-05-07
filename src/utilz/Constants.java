@@ -26,6 +26,8 @@ public class Constants {
         public static final int SOUND_SIZE_DEFAULT_HEIGHT = 21;
         public static final int SOUND_SIZE_WIDTH = (int) (SOUND_SIZE_DEFAULT_WIDTH * Game.GAME_SCALE * 2.5);
         public static final int SOUND_SIZE_HEIGHT = (int) (SOUND_SIZE_DEFAULT_HEIGHT * Game.GAME_SCALE * 2.5);
+        public static final int BACKGROUND_WIDTH =(int) (105 * Game.GAME_SCALE * 2.5);
+        public static final int BACKGROUND_HEIGHT = (int) (141 * Game.GAME_SCALE * 2.5);
     }
     public static class URMButton{
         public static final int URM_SIZE_DEFAULT_WIDTH = 23;

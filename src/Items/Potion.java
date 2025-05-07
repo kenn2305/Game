@@ -1,24 +1,31 @@
 package Items;
 
-import Player.Player;
+import Audio.AudioPlayer;
+import GameState.*;
 
 import java.awt.*;
 
 public class Potion extends Items{
     //Effect
-    private float scale_damage = 0.2f; private float timeEffectDamage = 3.0f;
-    private float scale_speed = 0.5f; private float timeEffectSpeed = 2.0f;
-    public Potion(float x, float y, String type , Player player) {
-        super(x, y, type, player);
+    private float scale_damage = 0.2f; private float timeEffectDamage = 10.0f;
+    private float scale_heal = 0.5f; private float timeEffectHeal = 7.0f;
+    public Potion(float x, float y, String type , Playing playing) {
+        super(x, y, type, playing);
     }
     protected void playerInteract(){
-        if (player.getBound().intersects(bounds)){
+        if (playing.getPlayer().getBound().intersects(bounds)){
             if (type == "BLUE"){
-                player.applyEffectFromPotion("BLUE",scale_speed, timeEffectSpeed);
-                player.setSpeedApplied(true);
+                playing.getGameController().getAudioPlayer().playPoolEffect(
+                        playing.getGameController().getAudioPlayer().getName(AudioPlayer.PICK_ITEM)
+                );
+                playing.getPlayer().applyEffectFromPotion("BLUE", scale_heal, timeEffectHeal);
+                playing.getPlayer().setHealingApplied(true);
             } else if (type == "RED"){
-                player.applyEffectFromPotion("RED",scale_damage, timeEffectDamage);
-                player.setDamageApplied(true);
+                playing.getGameController().getAudioPlayer().playPoolEffect(
+                        playing.getGameController().getAudioPlayer().getName(AudioPlayer.PICK_ITEM)
+                );
+                playing.getPlayer().applyEffectFromPotion("RED",scale_damage, timeEffectDamage);
+                playing.getPlayer().setDamageApplied(true);
             }
             active = false;
         }

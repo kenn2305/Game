@@ -1,6 +1,7 @@
 package GameState;
 
-import Game.Game;
+import Audio.AudioPlayer;
+import Game.*;
 import ui.MenuButton;
 import utilz.LoadSave;
 
@@ -15,7 +16,8 @@ public class Menu extends State implements StateMethods{
     private BufferedImage background;
     private BufferedImage[] background_animated;
     private int aniTick = 0, aniFrame = 0, aniSpeed = 2, aniTime = 118;
-    public Menu(){
+    public Menu(GameController gameController){
+        super(gameController);
         buttons = new MenuButton[3];
         loadButtons();
         loadBackground();
@@ -35,7 +37,7 @@ public class Menu extends State implements StateMethods{
             background_animated[i] = background.getSubimage(i * 620, 0, 620, 349);
         }
     }
-    private void updateFrame(){
+    public void updateFrame(){
         aniTick++;
         if(aniTick >= aniSpeed){
             aniTick = 0;
@@ -85,8 +87,11 @@ public class Menu extends State implements StateMethods{
             if (isIn(e,button)) {
                 if (button.getMousePressed()) {
                     button.applyGameState();
-                    break;
                 }
+                if (button.getGameState() == GameState.PLAYING) {
+                    gameController.getAudioPlayer().playSong(AudioPlayer.GAME);
+                }
+                break;
             }
         }
         for (MenuButton button : buttons) {
@@ -115,5 +120,8 @@ public class Menu extends State implements StateMethods{
     @Override
     public void KeyReleased(KeyEvent e) {
 
+    }
+    public BufferedImage getBackground(){
+        return background_animated[aniFrame];
     }
 }

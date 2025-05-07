@@ -3,147 +3,155 @@ package Audio;
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AudioPlayer {
-    public static final int MENU = 0;
-    public static final int GAME = 1;
+    public static int MENU = 0;
+    public static int GAME = 1;
 
-    public static final int ATTACK = 0;
-    public static final int JUMP = 1;
-    public static final int DOUBLE_JUMP = 2;
-    public static final int PICK_ITEM = 3;
-    public static final int GAME_OVER = 4;
+    public static int ATTACK = 0;
+    public static int ATTACK_2 = 1;
+    public static int JUMP = 2;
+    public static int DOUBLE_JUMP = 3;
+    public static int PICK_ITEM = 4;
+    public static int GAME_OVER = 5;
 
-    private final Clip[] songs, effects;
-    private int currentSongID;
-    private float volume = 1.0f;
-    private boolean songMuted = false;
-    private boolean effectMuted = false;
-
+    private Clip[] songs, effects;
+    private int currentSongID = 0;
+    private float song_volumn = 0.5f;
+    private float effect_volumn = 0.5f;
+    private Boolean songMuted = false , effectMuted = false ;
+    private String[] names;
+    private Map<String, List<Clip>> effectPool;
     public AudioPlayer() {
-        songs = new Clip[2];
-        effects = new Clip[5];
-        loadResources();
+        effectPool = new HashMap<>();
+        loadEffect();
+        loadSong();
         playSong(MENU);
     }
 
-    private void loadResources() {
-        loadSong();
-        loadEffect();
-    }
-
-    private void loadSong() {
-        String[] names = {"menuBgm", "GameMusic"};
-        for (int i = 0; i < names.length; i++) {
-            songs[i] = getClip("audio/" + names[i] + ".wav");
+    private void loadSong(){
+        String[] names = {"menuBgm","GameMusic"};
+        songs = new Clip[names.length];
+        for (int i = 0; i < songs.length; i++) {
+            songs[i] = getClip(names[i]);
         }
     }
-
-    private void loadEffect() {
-        String[] names = {"attack", "jump", "doublejump", "pickupitem", "gameover"};
-        for (int i = 0; i < names.length; i++) {
-            effects[i] = getClip("audio/" + names[i] + ".WAV");
-        }
-    }
-
-    private Clip getClip(String path) {
-        try {
-            URL url = getClass().getClassLoader().getResource(path);
-            if (url == null) {
-                throw new RuntimeException("Audio file not found: " + path);
+    private void loadEffect(){
+        names = new String[]{"attack", "attack2", "jump", "doubleJump", "pickupitem", "gameover"};
+        effects = new Clip[names.length];
+        for (int i = 0; i < effects.length; i++) {
+            effects[i] = getClip(names[i]);
+            List<Clip> clips = new ArrayList<>();
+            for (int j = 0 ; j < 6; j ++){
+                clips.add(cloneClip(names[i]));
             }
-
-            try (AudioInputStream audioStream = AudioSystem.getAudioInputStream(url)) {
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioStream);
-                return clip;
-            }
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            throw new RuntimeException("Failed to load audio: " + path, e);
+            effectPool.put(names[i], clips);
         }
-    }
-
-    private void updateSongVolume() {
-        if (songs[currentSongID] != null && songs[currentSongID].isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-            FloatControl gainControl = (FloatControl) songs[currentSongID].getControl(FloatControl.Type.MASTER_GAIN);
-            setGain(gainControl, volume);
-        }
-    }
-
-    private void updateEffectVolume() {
-        for (Clip effect : effects) {
-            if (effect != null && effect.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                FloatControl gainControl = (FloatControl) effect.getControl(FloatControl.Type.MASTER_GAIN);
-                setGain(gainControl, volume);
-            }
-        }
-    }
-
-    private void setGain(FloatControl control, float volume) {
-        float range = control.getMaximum() - control.getMinimum();
-        float gain = (range * volume) + control.getMinimum();
-        control.setValue(gain);
-    }
-
-    public void toggleSongMute() {
-        this.songMuted = !this.songMuted;
-        for (Clip song : songs) {
-            if (song != null && song.isControlSupported(BooleanControl.Type.MUTE)) {
-                BooleanControl booleanControl = (BooleanControl) song.getControl(BooleanControl.Type.MUTE);
-                booleanControl.setValue(songMuted);
-            }
-        }
-    }
-
-    public void toggleEffectMute() {
-        this.effectMuted = !this.effectMuted;
-        for (Clip effect : effects) {
-            if (effect != null && effect.isControlSupported(BooleanControl.Type.MUTE)) {
-                BooleanControl booleanControl = (BooleanControl) effect.getControl(BooleanControl.Type.MUTE);
-                booleanControl.setValue(effectMuted);
-            }
-        }
-    }
-
-    public void setVolume(float volume) {
-        this.volume = Math.max(0.0f, Math.min(1.0f, volume)); // Clamp value between 0 and 1
-        updateSongVolume();
         updateEffectVolume();
     }
-
-    public void stopSong() {
-        if (songs[currentSongID] != null && songs[currentSongID].isActive()) {
+    private Clip cloneClip(String name) {
+        try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(getClass().getResource("/audio/" + name + ".WAV"));
+            Clip clip = AudioSystem.getClip();
+            clip.open(ais);
+            return clip;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private Clip getClip(String name){
+        URL url = getClass().getResource("/audio/" + name + ".WAV");
+        AudioInputStream audio;
+        try {
+            audio = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audio);
+            return clip;
+        } catch (UnsupportedAudioFileException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private void updateSongVolume(){
+        FloatControl gainControl = (FloatControl) songs[currentSongID].getControl(FloatControl.Type.MASTER_GAIN);
+        float range = gainControl.getMaximum() - gainControl.getMinimum();
+        float gain = (range * song_volumn) + gainControl.getMinimum();
+        gainControl.setValue(gain);
+    }
+    private void updateEffectVolume(){
+        for (Clip c : effects) {
+            FloatControl gainControl = (FloatControl) c.getControl(FloatControl.Type.MASTER_GAIN);
+            float range = gainControl.getMaximum() - gainControl.getMinimum();
+            float gain = (range * effect_volumn) + gainControl.getMinimum();
+            gainControl.setValue(gain);
+        }
+        for (Map.Entry<String, List<Clip>> e : effectPool.entrySet()) {
+            String key = e.getKey();
+            List<Clip> clips = e.getValue();
+            for (Clip c : clips) {
+                FloatControl gainControl = (FloatControl) c.getControl(FloatControl.Type.MASTER_GAIN);
+                float range = gainControl.getMaximum() - gainControl.getMinimum();
+                float gain = (range * effect_volumn) + gainControl.getMinimum();
+                gainControl.setValue(gain);
+            }
+        }
+    }
+    public void toggleSongMute(){
+        this.songMuted = !this.songMuted;
+        for (Clip c : songs) {
+            BooleanControl booleanControl = (BooleanControl) c.getControl(BooleanControl.Type.MUTE);
+            booleanControl.setValue(songMuted);
+        }
+    }
+    public void toggleEffectMute(){
+        this.effectMuted = !this.effectMuted;
+        for (Clip c : effects) {
+            BooleanControl booleanControl = (BooleanControl) c.getControl(BooleanControl.Type.MUTE);
+            booleanControl.setValue(effectMuted);
+        }
+    }
+    public void setSongVolume(float volume){
+        this.song_volumn = volume;
+        updateSongVolume();
+    }
+    public void setEffectVolume(float volume){
+        this.effect_volumn = volume;
+        updateEffectVolume();
+    }
+    public void stopSong(){
+        if (songs[currentSongID].isActive()){
             songs[currentSongID].stop();
         }
     }
-
-    public void playEffect(int effect) {
-        if (effect >= 0 && effect < effects.length && effects[effect] != null) {
-            effects[effect].setFramePosition(0);
-            effects[effect].start();
-        }
-    }
-
-    public void playSong(int song) {
-        if (song >= 0 && song < songs.length && songs[song] != null) {
-            stopSong();
-            currentSongID = song;
-            updateSongVolume();
-            songs[currentSongID].setFramePosition(0);
-            songs[currentSongID].loop(Clip.LOOP_CONTINUOUSLY);
-        }
-    }
-
-    public void close() {
-        for (Clip song : songs) {
-            if (song != null) {
-                song.close();
+    public void playPoolEffect(String name) {
+        List<Clip> pool = effectPool.get(name);
+        for (Clip clip : pool) {
+            if (!clip.isRunning()) {
+                clip.setMicrosecondPosition(0);
+                clip.start();
+                break;
             }
         }
-        for (Clip effect : effects) {
-            if (effect != null) {
-                effect.close();
-            }
-        }
+    }
+    public void playSong(int song){
+        stopSong();
+        currentSongID = song;
+        updateSongVolume();
+        songs[currentSongID].setMicrosecondPosition(0);
+        songs[currentSongID].loop(Clip.LOOP_CONTINUOUSLY);
+    }
+    public void playPoolEffect(int effect){
+        effects[effect].setMicrosecondPosition(0);
+        effects[effect].start();
+    }
+    public String getName(int index){
+        return names[index];
     }
 }

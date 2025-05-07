@@ -1,5 +1,6 @@
 package Player;
 
+import Audio.AudioPlayer;
 import Levels.LevelManager;
 import utilz.Constants;
 import utilz.Maths;
@@ -26,6 +27,7 @@ public class DoubleJump extends PlayerState {
 
     @Override
     protected void onEnter() {
+        player.playing.getGameController().getAudioPlayer().playPoolEffect(AudioPlayer.DOUBLE_JUMP);
         playAnimation(Constants.PlayerConstants.JUMPING,Constants.PlayerAniConstants.JUMPING);
         aniSpeed = 10;
         player.setDouble_jump(true);

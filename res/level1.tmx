@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="781">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="60" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="775">
  <tileset firstgid="1" source="Assetss.tsx"/>
  <layer id="3" name="Layer3" width="60" height="50">
   <data encoding="csv">
@@ -714,11 +714,6 @@
   <object id="772" x="432" y="352" width="16" height="8"/>
   <object id="773" x="448" y="352" width="16" height="8"/>
   <object id="774" x="464" y="352" width="16" height="8"/>
-  <object id="776" x="16" y="64" width="16" height="16"/>
-  <object id="777" x="16" y="48" width="16" height="16"/>
-  <object id="778" x="16" y="32" width="16" height="16"/>
-  <object id="779" x="16" y="16" width="16" height="16"/>
-  <object id="780" x="16" y="0" width="16" height="16"/>
  </objectgroup>
  <objectgroup id="7" name="TurretsPoint">
   <object id="151" x="933.25" y="47.75" width="22" height="32"/>

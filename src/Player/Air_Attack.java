@@ -1,7 +1,7 @@
 package Player;
 
+import Audio.AudioPlayer;
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 import utilz.Maths;
 import utilz.Physics;
@@ -28,6 +28,7 @@ public class Air_Attack extends PlayerState{
 
     @Override
     protected void onEnter() {
+        player.playing.getGameController().getAudioPlayer().playPoolEffect(AudioPlayer.ATTACK);
         player.damage = 10;
         playAnimation(Constants.PlayerConstants.AIR_ATTACK, Constants.PlayerAniConstants.AIR_ATTACK);
         aniSpeed = 5;

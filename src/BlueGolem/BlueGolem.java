@@ -7,6 +7,7 @@
     import Ray.Ray;
     import org.w3c.dom.Text;
     import ui.TextDame;
+    import ui.TextDamePool;
     import utilz.LoadSave;
     import utilz.Maths;
 
@@ -47,8 +48,8 @@
         private float displayTime = 6.0f;
         private float displayTimer = 0.0f;
         private Boolean display = false;
-        private TextDame textDames;
-        public BlueGolem(float x, float y, LevelManager levelManager , Player player) {
+        private TextDamePool pool;
+        public BlueGolem(float x, float y, LevelManager levelManager , Player player, TextDamePool pool) {
             super(x, y, levelManager);
             this.player = player;
             loadSpriteSheet();
@@ -62,7 +63,7 @@
             states = State.WANDER;
             blueGolemStateMachine = new BlueGolemStateMachine(this, levelManager);
             ray = new Ray(levelManager);
-            textDames = new TextDame(0,0,0,0);
+            this.pool = pool;
         }
         private void loadSpriteSheet() {
             sprite_sheet = LoadSave.loadImage(LoadSave.BLUEGOLEM);
@@ -135,6 +136,7 @@
             }
             if (player.getHitbox().intersects(collisionBox)){
                 if (player.getHitbox_active() && hurtTimer <= 0 && !active){
+                    player.setGetIntersect(true);
                     hurt = true;
                     hurtTimer = hurtCooldown;
                     currentHealth -= player.getDame();
@@ -145,10 +147,10 @@
                     } else {
                         Direction = 1;
                     }
-                     textDames = new TextDame(collisionBox.x,
-                            collisionBox.y + collisionBox.height / 2 , 30, (int) player.getDame());
+                    pool.spawnTextDame(collisionBox.x,collisionBox.y,"-"+(int)player.getDame(),Color.RED);
                 } else {
                     hurt = false;
+                    player.setGetIntersect(false);
                 }
             }
 
@@ -224,15 +226,6 @@
             }
             return false;
         }
-        private void updateTextDame(float delta){
-            if (textDames != null){
-                textDames.update(delta);
-
-                if (textDames.opacity <= 0.1){
-                    textDames = null;
-                }
-            }
-        }
         public void update(float delta) {
             super.update(delta);
             blueGolemStateMachine.update(delta);
@@ -241,7 +234,6 @@
             updateRayCastFloor();
             stateUpdate(delta);
             updateHealthBar();
-            updateTextDame(delta);
         }
         private void updateHealthBar(){
             heathWidth = (int)((currentHealth / (float)maxHealth) * maxHealthBar);
@@ -258,9 +250,6 @@
             HealthBar(g , offsetX , offsetY);
             //Debug(g,offsetX,offsetY);
             blueGolemStateMachine.render(g, offsetX, offsetY);
-            if (textDames != null){
-                textDames.render(g, offsetX, offsetY);
-            }
         }
         public void Debug(Graphics g, int offsetX, int offsetY) {
             g.setColor(hitboxColor);

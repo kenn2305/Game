@@ -1,7 +1,7 @@
 package Player;
 
+import Audio.AudioPlayer;
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 
 import java.awt.*;
@@ -12,7 +12,13 @@ public class Attack_2 extends PlayerState{
     }
     @Override
     protected void update(float delta) {
-        player.damage = (int) (player.default_dame_2 + player.damageScale * player.default_dame_2);
+        if (player.getIntersect) {
+            player.currentHealth += player.healScale * player.damage;
+            player.healInDameDeal = (int) (player.healScale * player.damage);
+            if (player.currentHealth > player.maxHealth) player.currentHealth = player.maxHealth;
+        } else {
+            player.healInDameDeal = 0;
+        }
         player.setLockDirection(true);
         player.setFinishedAttack(false);
         updateAniFrames(stateTime);
@@ -26,9 +32,11 @@ public class Attack_2 extends PlayerState{
 
     @Override
     protected void onEnter() {
+        player.damage = (int) (player.default_dame_2 + player.damageScale * player.default_dame_2);
+        player.playing.getGameController().getAudioPlayer().playPoolEffect(AudioPlayer.ATTACK_2);
         playAnimation(Constants.PlayerConstants.ATTACK_2, Constants.PlayerAniConstants.ATTACK_2);
         player.setHitbox_active(false);
-        aniSpeed = 5;
+        aniSpeed = (int) ( 5 - 5 * player.damageScale);
     }
 
     public void updateState(float delta) {

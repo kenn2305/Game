@@ -1,9 +1,8 @@
 package Player;
 
+import Audio.AudioPlayer;
 import Levels.LevelManager;
 import utilz.Constants;
-import utilz.Maths;
-import utilz.Physics;
 
 import java.awt.*;
 
@@ -24,6 +23,8 @@ public class Die extends PlayerState{
 
     @Override
     protected void onEnter() {
+        player.playing.getGameController().getAudioPlayer().playPoolEffect(AudioPlayer.GAME_OVER);
+        player.playing.getGameController().getAudioPlayer().stopSong();
         playAnimation(Constants.PlayerConstants.DEATH, Constants.PlayerAniConstants.DEATH);
         aniSpeed = 10;
         player.setDouble_jump(false);
@@ -38,6 +39,7 @@ public class Die extends PlayerState{
     }
 
     private void updateState(float delta){
+        player.setVelX(0);
         if (finished){
             player.gameOver = true;
         }

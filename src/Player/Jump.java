@@ -1,7 +1,7 @@
 package Player;
 
+import Audio.AudioPlayer;
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 import utilz.Maths;
 import utilz.Physics;
@@ -28,6 +28,7 @@ public class Jump extends PlayerState {
 
     @Override
     protected void onEnter() {
+        player.playing.getGameController().getAudioPlayer().playPoolEffect(AudioPlayer.JUMP);
         playAnimation(Constants.PlayerConstants.JUMPING, Constants.PlayerAniConstants.JUMPING);
         aniSpeed = 10;
         float newVelY = -Physics.Force;

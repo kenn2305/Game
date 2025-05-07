@@ -12,6 +12,7 @@ public class VolumeButton extends PauseButton {
     private int index =0 ;
     private Boolean mouseOver = false, mousePressed = false;
     private int buttonX, minX, maxX;
+    private float floatvalue;
     public VolumeButton(int x, int y, int width, int height) {
         super(x + width / 2, y, Constants.VolumeButton.VOLUME_SIZE_WIDTH, height);
         bounds.x -=  Constants.VolumeButton.VOLUME_SIZE_WIDTH / 2;
@@ -48,8 +49,16 @@ public class VolumeButton extends PauseButton {
         } else {
             buttonX = x;
         }
+        updatefloatValue();
         bounds.x = buttonX - Constants.VolumeButton.VOLUME_SIZE_WIDTH / 2;
     }
+
+    private void updatefloatValue() {
+        float range = maxX - minX;
+        float value = buttonX - minX;
+        floatvalue = value / range;
+    }
+
     public void render(Graphics g) {
         g.drawImage(slider, x, y, width, height, null);
         g.drawImage(imgs[index], buttonX - Constants.VolumeButton.VOLUME_SIZE_WIDTH / 2, y, Constants.VolumeButton.VOLUME_SIZE_WIDTH, height, null);
@@ -73,5 +82,8 @@ public class VolumeButton extends PauseButton {
 
     public void setMouseOver(Boolean mouseOver) {
         this.mouseOver = mouseOver;
+    }
+    public float getFloatvalue() {
+        return floatvalue;
     }
 }

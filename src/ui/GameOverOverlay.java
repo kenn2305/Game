@@ -65,11 +65,12 @@ public class GameOverOverlay {
         if (isIn(nextButton,e)){
             if (nextButton.getMousePressed()){
                 playing.replay();
+                playing.setGameState(GameState.PLAYING);
             }
         } else if (isIn(menuButton,e)){
             if (menuButton.getMousePressed()){
-                GameState.state = GameState.MENU;
                 playing.replay();
+                playing.setGameState(GameState.MENU);
             }
         }
         menuButton.resetBool();

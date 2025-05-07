@@ -20,24 +20,18 @@ public class MouseInput implements MouseListener , MouseMotionListener {
     @Override
     public void mousePressed(MouseEvent e) {
         switch (GameState.state) {
-            case MENU:
-                gamePanel.getGameController().getMenu().MousePressed(e);
-                break;
-            case PLAYING:
-                gamePanel.getGameController().getPlaying().MousePressed(e);
-                break;
+            case MENU -> gamePanel.getGameController().getMenu().MousePressed(e);
+            case OPTIONS -> gamePanel.getGameController().getMenuOption().MousePressed(e);
+            case PLAYING -> gamePanel.getGameController().getPlaying().MousePressed(e);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         switch (GameState.state) {
-            case MENU:
-                gamePanel.getGameController().getMenu().MouseReleased(e);
-                break;
-            case PLAYING:
-                gamePanel.getGameController().getPlaying().MouseReleased(e);
-                break;
+            case MENU -> gamePanel.getGameController().getMenu().MouseReleased(e);
+            case OPTIONS -> gamePanel.getGameController().getMenuOption().MouseReleased(e);
+            case PLAYING -> gamePanel.getGameController().getPlaying().MouseReleased(e);
         }
     }
 
@@ -54,21 +48,18 @@ public class MouseInput implements MouseListener , MouseMotionListener {
     @Override
     public void mouseDragged(MouseEvent e) {
         switch (GameState.state) {
-            case PLAYING:
-                gamePanel.getGameController().getPlaying().MouseDragged(e);
-                break;
+            case MENU -> gamePanel.getGameController().getMenu().MouseDragged(e);
+            case OPTIONS -> gamePanel.getGameController().getMenuOption().MouseDragged(e);
+            case PLAYING -> gamePanel.getGameController().getPlaying().MouseDragged(e);
         }
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         switch (GameState.state) {
-            case MENU:
-                gamePanel.getGameController().getMenu().MouseMoved(e);
-                break;
-            case PLAYING:
-                gamePanel.getGameController().getPlaying().MouseMoved(e);
-                break;
+            case MENU -> gamePanel.getGameController().getMenu().MouseMoved(e);
+            case OPTIONS -> gamePanel.getGameController().getMenuOption().MouseMoved(e);
+            case PLAYING -> gamePanel.getGameController().getPlaying().MouseMoved(e);
         }
     }
 }
