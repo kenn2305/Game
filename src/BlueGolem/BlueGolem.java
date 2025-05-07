@@ -47,7 +47,7 @@
         private float displayTime = 6.0f;
         private float displayTimer = 0.0f;
         private Boolean display = false;
-        private ArrayList<TextDame> textDames;
+        private TextDame textDames;
         public BlueGolem(float x, float y, LevelManager levelManager , Player player) {
             super(x, y, levelManager);
             this.player = player;
@@ -62,7 +62,7 @@
             states = State.WANDER;
             blueGolemStateMachine = new BlueGolemStateMachine(this, levelManager);
             ray = new Ray(levelManager);
-            textDames = new ArrayList<>();
+            textDames = new TextDame(0,0,0,0);
         }
         private void loadSpriteSheet() {
             sprite_sheet = LoadSave.loadImage(LoadSave.BLUEGOLEM);
@@ -145,9 +145,8 @@
                     } else {
                         Direction = 1;
                     }
-                     tmp = new TextDame(collisionBox.x,
+                     textDames = new TextDame(collisionBox.x,
                             collisionBox.y + collisionBox.height / 2 , 30, (int) player.getDame());
-                    textDames.add(tmp);
                 } else {
                     hurt = false;
                 }
@@ -226,15 +225,11 @@
             return false;
         }
         private void updateTextDame(float delta){
-            for (TextDame tmp : new ArrayList<>(textDames)) {
-                tmp.update(delta);
-            }
-        }
-        private void removeTextDame(){
-            for ( int i = textDames.size() - 1; i >= 0; i--){
-                TextDame tmp2 = textDames.get(i);
-                if (tmp2.opacity == 0){
-                    textDames.remove(i);
+            if (textDames != null){
+                textDames.update(delta);
+
+                if (textDames.opacity <= 0.1){
+                    textDames = null;
                 }
             }
         }
@@ -246,7 +241,6 @@
             updateRayCastFloor();
             stateUpdate(delta);
             updateHealthBar();
-            removeTextDame();
             updateTextDame(delta);
         }
         private void updateHealthBar(){
@@ -262,10 +256,10 @@
         }
         public void render(Graphics g, int offsetX, int offsetY) {
             HealthBar(g , offsetX , offsetY);
-            Debug(g,offsetX,offsetY);
+            //Debug(g,offsetX,offsetY);
             blueGolemStateMachine.render(g, offsetX, offsetY);
-            for (TextDame tmp : new ArrayList<>(textDames)) {
-                tmp.render(g, offsetX, offsetY);
+            if (textDames != null){
+                textDames.render(g, offsetX, offsetY);
             }
         }
         public void Debug(Graphics g, int offsetX, int offsetY) {

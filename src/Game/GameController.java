@@ -1,4 +1,5 @@
 package Game;
+import Audio.AudioPlayer;
 import BlueGolem.BlueGolem;
 import Camera.Camera2D;
 import EnemyManager.EnemyManager;
@@ -17,11 +18,13 @@ public class GameController {
     private GameWindow gameWindow;
     private Menu menu;
     private Playing playing;
+    private AudioPlayer audioPlayer;
     public GameController() {
         playing = new Playing();
         menu = new Menu();
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
+        audioPlayer = new AudioPlayer();
         gamePanel.requestFocus();
     }
 
@@ -56,5 +59,8 @@ public class GameController {
 
     public Playing getPlaying() {
         return playing;
+    }
+    public AudioPlayer getAudioPlayer() {
+        return audioPlayer;
     }
 }
