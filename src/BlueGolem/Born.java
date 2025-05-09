@@ -26,11 +26,10 @@ public class Born extends BlueGolemState{
     @Override
     protected void onEnter() {
         System.out.println("Born");
-        blueGolem.active = true;
-        blueGolem.setLockDirection(false);
+        blueGolem.lockDirection = false;
         blueGolem.stateTimeOut = blueGolem.getStateTime();
         playAnimation(Constants.BlueGolemConstants.BORN, Constants.BlueGolemAniConstants.BORN);
-        blueGolem.setChase(false);
+        blueGolem.Chase = false;
         aniSpeed = 5;
     }
 

@@ -68,8 +68,8 @@ public class Camera2D {
     public void render(Graphics g) {
         renderBackground(g, offsetX, offsetY);
         DrawMapInViewPort(g);
-//        DebugBox(g);
-//        DebugHitBox(g);
+        DebugBox(g);
+        DebugHitBox(g);
         drawPlayerInViewPort(g);
     }
 
@@ -128,10 +128,10 @@ public class Camera2D {
             }
         }
         //Debug
-//        for (Rectangle bound : bounds) {
-//            g.setColor(new Color(0,0,130,80));
-//            g.fillRect(bound.x - offsetX, bound.y - offsetY, bound.width, bound.height);
-//        }
+        for (Rectangle bound : bounds) {
+            g.setColor(new Color(0,0,130,80));
+            g.fillRect(bound.x - offsetX, bound.y - offsetY, bound.width, bound.height);
+        }
     }
 
     private void drawPlayerInViewPort(Graphics g) {

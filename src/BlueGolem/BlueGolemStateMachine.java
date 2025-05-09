@@ -6,11 +6,13 @@ import StateMachine.StateMachine;
 import java.awt.*;
 
 public class BlueGolemStateMachine extends StateMachine {
-    protected BlueGolemState currentState;
+    private BlueGolem blueGolem;
+    private BlueGolemState currentState;
     protected Idle Idle; protected Wander Wander; protected Attack Attack; protected Chase Chase;
     protected Born Born; protected Death Death; protected Hurt Hurt;
     public BlueGolemStateMachine(BlueGolem blueGolem , LevelManager  levelManager) {
         super(levelManager);
+        this.blueGolem = blueGolem;
         Idle = new Idle(blueGolem,this,levelManager);
         Wander = new Wander(blueGolem,this,levelManager);
         Attack = new Attack(blueGolem,this,levelManager);
@@ -38,8 +40,5 @@ public class BlueGolemStateMachine extends StateMachine {
         }
         currentState = next_state;
         currentState.onEnter();
-    }
-    protected void activateBlueGolem() {
-        currentState = Born;
     }
 }

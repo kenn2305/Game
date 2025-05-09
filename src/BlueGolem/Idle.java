@@ -25,9 +25,9 @@ public class Idle extends BlueGolemState{
     @Override
     protected void onEnter() {
         System.out.println("IDLE");
-        blueGolem.setLockDirection(true);
+        blueGolem.lockDirection = false;
         blueGolem.stateTimeOut = blueGolem.getStateTime();
-        blueGolem.setChase(true);
+        blueGolem.Chase = false;
         playAnimation(Constants.BlueGolemConstants.IDLE, Constants.BlueGolemAniConstants.IDLE);
         aniSpeed = 8;
     }
@@ -36,7 +36,7 @@ public class Idle extends BlueGolemState{
     private void updateState(float delta) {
         blueGolem.setVelX(0);
 
-        if (blueGolem.getDeath()){
+        if (blueGolem.death){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
@@ -51,11 +51,11 @@ public class Idle extends BlueGolemState{
             }
         }
 
-        if (blueGolem.getAttack()){
+        if (blueGolem.isAttack){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Attack);
-        } else if (blueGolem.getChase()){
+        } else if (blueGolem.Chase){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
-        } else if (blueGolem.getHurt()) {
+        } else if (blueGolem.hurt) {
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Hurt);
         }
     }

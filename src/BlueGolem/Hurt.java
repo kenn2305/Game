@@ -17,7 +17,7 @@ public class Hurt extends BlueGolemState{
 
     @Override
     protected void update(float delta) {
-        blueGolem.setLockDirection(true);
+        blueGolem.lockDirection = true;
         updateAniFrames(stateTime);
         updateState(delta);
     }
@@ -32,14 +32,14 @@ public class Hurt extends BlueGolemState{
 
     private void updateState(float delta) {
         blueGolem.setVelX(0);
-        if (blueGolem.getDeath()){
+        if (blueGolem.death){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
         if (finished){
-            if (blueGolem.getAttack()){
+            if (blueGolem.isAttack){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Attack);
-            } else if (blueGolem.getChase()){
+            } else if (blueGolem.Chase){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
             } else if (blueGolem.states == BlueGolem.State.IDLE){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Idle);

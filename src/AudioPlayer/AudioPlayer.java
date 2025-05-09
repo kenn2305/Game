@@ -1,7 +1,10 @@
-package Audio;
+package AudioPlayer;
 
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +44,7 @@ public class AudioPlayer {
         }
     }
     private void loadEffect(){
-        names = new String[]{"attack", "attack2", "jump", "doubleJump", "pickupitem", "gameover"};
+        names = new String[]{"attack", "attack2", "jump", "doublejump", "pickupitem", "gameover"};
         effects = new Clip[names.length];
         for (int i = 0; i < effects.length; i++) {
             effects[i] = getClip(names[i]);
@@ -55,28 +58,36 @@ public class AudioPlayer {
     }
     private Clip cloneClip(String name) {
         try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(getClass().getResource("/audio/" + name + ".WAV"));
+            InputStream is = getClass().getResourceAsStream("/audio/" + name + ".WAV");
+            if (is == null) {
+                throw new RuntimeException("Audio file not found: /audio/" + name + ".WAV");
+            }
+
+            byte[] audioData = is.readAllBytes();
+            ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(new BufferedInputStream(bais));
             Clip clip = AudioSystem.getClip();
             clip.open(ais);
             return clip;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error cloning audio clip: " + name, e);
         }
     }
     private Clip getClip(String name){
-        URL url = getClass().getResource("/audio/" + name + ".WAV");
-        AudioInputStream audio;
         try {
-            audio = AudioSystem.getAudioInputStream(url);
+            InputStream is = getClass().getResourceAsStream("/audio/" + name + ".WAV");
+            if (is == null) {
+                throw new RuntimeException("Audio file not found: /audio/" + name + ".WAV");
+            }
+
+            byte[] audioData = is.readAllBytes();
+            ByteArrayInputStream bais = new ByteArrayInputStream(audioData);
+            AudioInputStream audio = AudioSystem.getAudioInputStream(new BufferedInputStream(bais));
             Clip clip = AudioSystem.getClip();
             clip.open(audio);
             return clip;
-        } catch (UnsupportedAudioFileException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (LineUnavailableException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error loading audio: " + name, e);
         }
     }
     private void updateSongVolume(){

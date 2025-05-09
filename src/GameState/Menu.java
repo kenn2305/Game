@@ -1,6 +1,6 @@
 package GameState;
 
-import Audio.AudioPlayer;
+import AudioPlayer.AudioPlayer;
 import Game.*;
 import ui.MenuButton;
 import utilz.LoadSave;

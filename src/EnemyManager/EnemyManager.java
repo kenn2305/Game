@@ -76,10 +76,12 @@ public class EnemyManager {
                 int y = (int) (point.y * Game.GAME_SCALE * 2);
                 int idx = rand.nextInt(2);
                 if (idx == 0) {
-                    BlueGolem blueGolem = new BlueGolem(x, y + 25, playing.getLevelManager(), playing.getPlayer(), playing.getPool());
+                    BlueGolem blueGolem = new BlueGolem(x, y + 25, playing.getLevelManager(),
+                            playing.getPlayer(), playing.getPool());
                     blueGolems.add(blueGolem);
                 } else if (idx == 1) {
-                    GoldGolem goldGolem = new GoldGolem(x, y + 25, playing.getLevelManager(), playing.getPlayer(), playing.getPool());
+                    GoldGolem goldGolem = new GoldGolem(x, y + 25,
+                            playing.getLevelManager(), playing.getPlayer(), playing.getPool());
                     goldGolems.add(goldGolem);
                 }
                 spawnTimer = 0.0f;

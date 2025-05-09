@@ -139,7 +139,6 @@ public class Playing extends State implements StateMethods {
     private void processLevel(Graphics g) {
         int x = 20;
         int y = Game.GAME_HEIGHT - 20;
-        g.drawImage(process, x, y - 100, (int) (process.getWidth() * Game.GAME_SCALE * 1.5), (int) (process.getHeight() * Game.GAME_SCALE * 1.5), null);
         String currentEnemyKilled = player.getEnemy_kill_num() + "";
         String levelEnemyKillRequired = levelManager.getCurrentLevel().getMisson() + "";
         g.setFont(font.deriveFont(90f));

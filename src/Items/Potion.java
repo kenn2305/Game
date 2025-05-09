@@ -1,6 +1,6 @@
 package Items;
 
-import Audio.AudioPlayer;
+import AudioPlayer.AudioPlayer;
 import GameState.*;
 
 import java.awt.*;

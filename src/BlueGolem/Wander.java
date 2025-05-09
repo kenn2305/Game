@@ -26,10 +26,10 @@ public class Wander extends BlueGolemState{
     @Override
     protected void onEnter() {
         System.out.println("wander");
-        blueGolem.setLockDirection(false);
-        if (blueGolem.getIntersectsInChase()){
-            blueGolem.setChase(false);
-            blueGolem.setIntersectsInChase(false);
+        blueGolem.lockDirection = false;
+        if (blueGolem.intersectsInChase){
+            blueGolem.Chase = false;
+            blueGolem.intersectsInChase = false;
         }
         blueGolem.stateTimeOut = blueGolem.getStateTime();
         playAnimation(Constants.BlueGolemConstants.WALK, Constants.BlueGolemAniConstants.WALK);
@@ -38,21 +38,21 @@ public class Wander extends BlueGolemState{
 
     private void updateState(float delta) {
 
-        if (blueGolem.getDeath()){
+        if (blueGolem.death){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
 
         if (blueGolem.checkCollisionLeftWall() && !blueGolem.checkCollisionRightWall()) {
-            blueGolem.setDirection(1);
+            blueGolem.Direction = 1;
             blueGolem.stateTimeOut = blueGolem.getStateTime();
         } else if (blueGolem.checkCollisionRightWall() && !blueGolem.checkCollisionLeftWall()) {
-            blueGolem.setDirection(-1);
+            blueGolem.Direction = -1;
             blueGolem.stateTimeOut = blueGolem.getStateTime();
         }
 
-        if (blueGolem.checkCollisionFloor() && !blueGolem.getRayCastFloorActive()){
-            blueGolem.setDirection(blueGolem.getDirection() * -1);
+        if (blueGolem.checkCollisionFloor() && !blueGolem.rayCastFloorActive){
+            blueGolem.Direction *= -1;
             blueGolem.stateTimeOut = blueGolem.getStateTime();
         }
 
@@ -66,11 +66,11 @@ public class Wander extends BlueGolemState{
             }
         }
 
-        if (blueGolem.getAttack()){
+        if (blueGolem.isAttack){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Attack);
-        } else if (blueGolem.getChase()){
+        } else if (blueGolem.Chase){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
-        } else if (blueGolem.getHurt()) {
+        } else if (blueGolem.hurt) {
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Hurt);
         }
     }

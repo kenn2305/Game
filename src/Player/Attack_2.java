@@ -1,6 +1,6 @@
 package Player;
 
-import Audio.AudioPlayer;
+import AudioPlayer.AudioPlayer;
 import Levels.LevelManager;
 import utilz.Constants;
 

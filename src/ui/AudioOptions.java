@@ -1,8 +1,6 @@
 package ui;
 
-import Audio.AudioPlayer;
 import Game.*;
-import GameState.Playing;
 import utilz.Constants;
 
 import java.awt.*;

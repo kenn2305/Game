@@ -1,17 +1,10 @@
 package Game;
-import Audio.AudioPlayer;
-import BlueGolem.BlueGolem;
-import Camera.Camera2D;
-import EnemyManager.EnemyManager;
+import AudioPlayer.AudioPlayer;
 import GameState.GameState;
 import GameState.Playing;
 import GameState.Menu;
 import GameState.MenuOption;
-import Player.Player;
-import Levels.LevelManager;
-import Player.PlayerStateMachine;
 import ui.AudioOptions;
-import ui.TextDamePool;
 
 import java.awt.*;
 
@@ -29,9 +22,9 @@ public class GameController {
         playing = new Playing(this);
         menu = new Menu(this);
         menuOption = new MenuOption(this);
+        audioPlayer = new AudioPlayer();
         gamePanel = new GamePanel(this);
         gameWindow = new GameWindow(gamePanel);
-        audioPlayer = new AudioPlayer();
         gamePanel.requestFocus();
     }
 

@@ -16,7 +16,7 @@ public class Attack extends BlueGolemState{
 
     @Override
     protected void update(float delta) {
-        blueGolem.setLockDirection(true);
+        blueGolem.lockDirection = true;
         updateAniFrames(stateTime);
         updateState(delta);
     }
@@ -32,16 +32,16 @@ public class Attack extends BlueGolemState{
     private void updateState(float delta) {
         blueGolem.setVelX(0);
         if (aniFrame == 6 || aniFrame == 7) {
-            blueGolem.setHitbox_active(true);
+            blueGolem.hitbox_active = true;
         } else {
-            blueGolem.setHitbox_active(false);
+            blueGolem.hitbox_active = false;
         }
-        if (blueGolem.getDeath()) {
+        if (blueGolem.death) {
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
 
-        if (!blueGolem.getAttack()){
+        if (!blueGolem.isAttack){
             if (finished) {
                 blueGolem.stateOut = false;
                 blueGolem.stateTimer = 0;
@@ -49,7 +49,7 @@ public class Attack extends BlueGolemState{
                     blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Idle);
                 } else if (blueGolem.states == BlueGolem.State.WANDER) {
                     blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Wander);
-                } else if (blueGolem.getChase()) {
+                } else if (blueGolem.Chase) {
                     blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
                 }
             }

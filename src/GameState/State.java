@@ -1,6 +1,6 @@
 package GameState;
 
-import Audio.AudioPlayer;
+import AudioPlayer.AudioPlayer;
 import ui.MenuButton;
 
 import java.awt.event.MouseEvent;

@@ -142,7 +142,6 @@ public class Ray {
         }
 
         if (!found_horizontal_wall && !found_vertical_wall) {
-            // Không có tường nào, ray sẽ đi thẳng đến player
             wall_hit_x = (int)end_x;
             wall_hit_y = (int)end_y;
         } else if (distance_horizontal < distance_vertical) {

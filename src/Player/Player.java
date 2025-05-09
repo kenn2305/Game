@@ -123,7 +123,6 @@ public class Player extends Entity {
         } else {
             healApplied = false;
             getHeal = false;
-            healOnce = true;
             heal = 0;
         }
     }
@@ -194,7 +193,7 @@ public class Player extends Entity {
             currentHealth = 0;
         }
 
-        if (currentHealth <= 0){
+        if (currentHealth <= 0 || collisionBox.y >= playing.getLevelManager().getCurrentLevel().getMap_height()){
             die = true;
         }
         System.out.println(currentHealth);

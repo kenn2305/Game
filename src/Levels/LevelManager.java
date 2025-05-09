@@ -23,7 +23,7 @@ public class LevelManager {
         levels.add(level_1);
         Level level_2 = new Level(LoadSave.LEVEL_2,0,0,30);
         levels.add(level_2);
-        Level level_3 = new Level(LoadSave.LEVEL_3,200,50,50);
+        Level level_3 = new Level(LoadSave.LEVEL_3,200,50,40);
         levels.add(level_3);
     }
 
