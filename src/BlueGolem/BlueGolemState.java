@@ -28,14 +28,14 @@ public class BlueGolemState extends State {
         } else {
             g.drawImage(blueGolem.getSprite(state,aniFrame),
                     (int)(blueGolem.getBounds().x + 33 * Game.GAME_SCALE * 1.5 + blueGolem.getBounds().width - offsetX), (int)(blueGolem.getBounds().y - 32 * Game.GAME_SCALE * 1.5 - offsetY),
-                    (int)(blueGolem.getSprite(0,0).getWidth() * Game.GAME_SCALE * 1.5 * blueGolem.Direction),
+                    (int)(blueGolem.getSprite(0,0).getWidth() * Game.GAME_SCALE * 1.5 * blueGolem.getDirection()),
                     (int)(blueGolem.getSprite(0,0).getHeight() * Game.GAME_SCALE * 1.5), null);
         }
     }
     
 
     protected void updateMovementInState(float delta){
-        float newVelX = Maths.Lerp(blueGolem.getVelX(), Physics.WANDER_VELOCITY * blueGolem.Direction, delta * 50);
+        float newVelX = Maths.Lerp(blueGolem.getVelX(), Physics.WANDER_VELOCITY * blueGolem.getDirection(), delta * 50);
         blueGolem.setVelX(newVelX);
 
         float newVelY = Maths.Lerp(blueGolem.getVelY(), Physics.Gravity * 2, delta * 10);

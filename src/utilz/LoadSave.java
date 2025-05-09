@@ -41,6 +41,8 @@ public class LoadSave {
     public static final String COMPLETE_IMG = "levelcompletebackgorund.png";
     public static final String GAME_COMPLETE = "gameCompleted.png";
     public static final String GAME_OVER = "gameOver.png";
+    public static final String PROCESS_BAR = "process.png";
+    public static final String CONTROL = "Control.png";
     public static BufferedImage loadImage(String filename) {
         BufferedImage image = null;
         InputStream is = LoadSave.class.getResourceAsStream("/" + filename);

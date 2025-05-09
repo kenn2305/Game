@@ -1,7 +1,6 @@
 package BlueGolem;
 
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 
 import java.awt.*;
@@ -18,7 +17,7 @@ public class Hurt extends BlueGolemState{
 
     @Override
     protected void update(float delta) {
-        blueGolem.lockDirection = true;
+        blueGolem.setLockDirection(true);
         updateAniFrames(stateTime);
         updateState(delta);
     }
@@ -33,14 +32,14 @@ public class Hurt extends BlueGolemState{
 
     private void updateState(float delta) {
         blueGolem.setVelX(0);
-        if (blueGolem.death){
+        if (blueGolem.getDeath()){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
         if (finished){
-            if (blueGolem.isAttack){
+            if (blueGolem.getAttack()){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Attack);
-            } else if (blueGolem.Chase){
+            } else if (blueGolem.getChase()){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
             } else if (blueGolem.states == BlueGolem.State.IDLE){
                 blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Idle);

@@ -13,7 +13,7 @@ public class Death extends BlueGolemState{
 
     @Override
     protected void onEnter() {
-        blueGolem.active = true;
+        blueGolem.active = false;
         System.out.println("Death");
         playAnimation(Constants.BlueGolemConstants.DIE, Constants.BlueGolemAniConstants.DIE);
         aniSpeed = 8;
@@ -21,20 +21,22 @@ public class Death extends BlueGolemState{
 
     @Override
     protected void render(Graphics g, int offsetX, int offsetY) {
-        drawAnimations(g,offsetX,offsetY,state);
+        if (!blueGolem.getFinisedDeath()) {
+            drawAnimations(g, offsetX, offsetY, state);
+        }
     }
 
     @Override
     protected void update(float delta) {
-        blueGolem.lockDirection = true;
+        blueGolem.setLockDirection(true);
         updateAniFrames(stateTime);
-        blueGolem.Chase = false;
+        blueGolem.setChase(false);
         updateState(delta);
     }
     private void updateState(float delta) {
         blueGolem.setVelX(0);
         if (finished){
-            blueGolem.finisedDeath = true;
+            blueGolem.setFinisedDeath(true);
         }
     }
 }

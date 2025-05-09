@@ -1,7 +1,6 @@
 package BlueGolem;
 
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 
 import java.awt.*;
@@ -27,10 +26,11 @@ public class Born extends BlueGolemState{
     @Override
     protected void onEnter() {
         System.out.println("Born");
-        blueGolem.lockDirection = false;
+        blueGolem.active = true;
+        blueGolem.setLockDirection(false);
         blueGolem.stateTimeOut = blueGolem.getStateTime();
         playAnimation(Constants.BlueGolemConstants.BORN, Constants.BlueGolemAniConstants.BORN);
-        blueGolem.Chase = false;
+        blueGolem.setChase(false);
         aniSpeed = 5;
     }
 

@@ -11,7 +11,7 @@ public class Ray {
     private Boolean bottom, top, left, right;
     private int wall_hit_x , wall_hit_y;
     private LevelManager manager;
-    Boolean found_horizontal_wall; Boolean found_vertical_wall;
+    private Boolean found_horizontal_wall = false; private Boolean found_vertical_wall = false;
     public Ray(LevelManager manager) {
         this.manager = manager;
     }

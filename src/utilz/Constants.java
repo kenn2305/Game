@@ -83,6 +83,22 @@ public class Constants {
         public static final int DIE = 13;
     }
 
+    public static class TheDeathConstants {
+        public static final int IDLE = 0;
+        public static final int WANDER = 1;
+        public static final int ATTACK = 2;
+        public static final int HURT = 3;
+        public static final int DIE = 4;
+        public static final int BORN = 8;
+    }
+    public static class TheDeathAniConstants {
+        public static final int IDLE = 8;
+        public static final int WANDER = 8;
+        public static final int ATTACK = 9;
+        public static final int HURT = 5;
+        public static final int DIE = 10;
+        public static final int BORN = 10;
+    }
     public static class ItemConstants {
         public static final int BLUE_POTION = 0;
         public static final int RED_POTION = 1;

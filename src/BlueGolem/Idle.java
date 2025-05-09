@@ -1,7 +1,6 @@
 package BlueGolem;
 
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 
 import java.awt.*;
@@ -26,9 +25,9 @@ public class Idle extends BlueGolemState{
     @Override
     protected void onEnter() {
         System.out.println("IDLE");
-        blueGolem.lockDirection = false;
+        blueGolem.setLockDirection(true);
         blueGolem.stateTimeOut = blueGolem.getStateTime();
-        blueGolem.Chase = false;
+        blueGolem.setChase(true);
         playAnimation(Constants.BlueGolemConstants.IDLE, Constants.BlueGolemAniConstants.IDLE);
         aniSpeed = 8;
     }
@@ -37,7 +36,7 @@ public class Idle extends BlueGolemState{
     private void updateState(float delta) {
         blueGolem.setVelX(0);
 
-        if (blueGolem.death){
+        if (blueGolem.getDeath()){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
@@ -52,11 +51,11 @@ public class Idle extends BlueGolemState{
             }
         }
 
-        if (blueGolem.isAttack){
+        if (blueGolem.getAttack()){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Attack);
-        } else if (blueGolem.Chase){
+        } else if (blueGolem.getChase()){
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
-        } else if (blueGolem.hurt) {
+        } else if (blueGolem.getHurt()) {
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Hurt);
         }
     }

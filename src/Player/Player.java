@@ -123,6 +123,7 @@ public class Player extends Entity {
         } else {
             healApplied = false;
             getHeal = false;
+            healOnce = true;
             heal = 0;
         }
     }
@@ -200,7 +201,7 @@ public class Player extends Entity {
     }
     private void updateHealthBar(){
         currentHealthBarWidth = (int)((float)currentHealth/maxHealth * maxHealthBarWidth);
-        if (healInDameDeal != 0){
+        if (healInDameDeal != 0 && currentHealth < maxHealth){
             playing.getPool().spawnTextDame(collisionBox.x, collisionBox.y,(int)(damage * healScale) + "",Color.GREEN);
         } else if (heal != 0 && !healOnce){
             playing.getPool().spawnTextDame(collisionBox.x, collisionBox.y,(int)(heal) + "",Color.GREEN);

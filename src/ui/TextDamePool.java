@@ -8,7 +8,7 @@ import java.util.List;
 public class TextDamePool {
     private List<TextDame> textDames;
     private int poolSize;
-    private final float maxExtralLifeTime = 7.0f;
+    private final float maxExtralLifeTime = 2.0f;
     private List<Float> extralLifeTimes;
     public TextDamePool(int size) {
         textDames = new ArrayList<TextDame>();
@@ -35,27 +35,21 @@ public class TextDamePool {
         extralLifeTimes.add(0.0f);
     }
     public void update(float delta){
-        int index = poolSize;
-
+        System.out.println(textDames.size());
         for (TextDame textDame : textDames){
             if (textDame.active){
                 textDame.update(delta);
             }
         }
-
-        Iterator<Float> timerIter = extralLifeTimes.iterator();
-        while (timerIter.hasNext()){
-            int idx = extralLifeTimes.indexOf(timerIter.next()) + poolSize;
-            if (idx >= poolSize) return;
-
-            if (!textDames.get(idx).active){
-                float newTimer = extralLifeTimes.get(idx - poolSize) + delta * 2;
-                if (newTimer > maxExtralLifeTime){
+        for (int i = extralLifeTimes.size() - 1; i >= 0; i--) {
+            int idx = i + poolSize;
+            if (!textDames.get(idx).active) {
+                float newTimer = extralLifeTimes.get(i) + delta * 2;
+                if (newTimer > maxExtralLifeTime) {
                     textDames.remove(idx);
-                    timerIter.remove();
-                    continue;
+                    extralLifeTimes.remove(i);
                 } else {
-                    extralLifeTimes.set(idx - poolSize, newTimer);
+                    extralLifeTimes.set(i, newTimer);
                 }
             }
         }

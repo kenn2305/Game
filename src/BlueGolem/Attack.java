@@ -1,7 +1,6 @@
 package BlueGolem;
 
 import Levels.LevelManager;
-import StateMachine.StateMachine;
 import utilz.Constants;
 
 import java.awt.*;
@@ -17,7 +16,7 @@ public class Attack extends BlueGolemState{
 
     @Override
     protected void update(float delta) {
-        blueGolem.lockDirection = true;
+        blueGolem.setLockDirection(true);
         updateAniFrames(stateTime);
         updateState(delta);
     }
@@ -33,16 +32,16 @@ public class Attack extends BlueGolemState{
     private void updateState(float delta) {
         blueGolem.setVelX(0);
         if (aniFrame == 6 || aniFrame == 7) {
-            blueGolem.hitbox_active = true;
+            blueGolem.setHitbox_active(true);
         } else {
-            blueGolem.hitbox_active = false;
+            blueGolem.setHitbox_active(false);
         }
-        if (blueGolem.death) {
+        if (blueGolem.getDeath()) {
             blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Death);
             return;
         }
 
-        if (!blueGolem.isAttack){
+        if (!blueGolem.getAttack()){
             if (finished) {
                 blueGolem.stateOut = false;
                 blueGolem.stateTimer = 0;
@@ -50,7 +49,7 @@ public class Attack extends BlueGolemState{
                     blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Idle);
                 } else if (blueGolem.states == BlueGolem.State.WANDER) {
                     blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Wander);
-                } else if (blueGolem.Chase) {
+                } else if (blueGolem.getChase()) {
                     blueGolemStateMachine.Change_to_next_state(blueGolemStateMachine.Chase);
                 }
             }

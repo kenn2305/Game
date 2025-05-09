@@ -1,8 +1,6 @@
 package Levels;
 
-import GameState.GameState;
 import GameState.Playing;
-import Player.Player;
 import utilz.LoadSave;
 import Game.Game;
 
@@ -21,11 +19,11 @@ public class LevelManager {
         loadAllLevels();
     }
     private void loadAllLevels(){
-        Level level_1 = new Level(LoadSave.LEVEL_1,200,50,10);
+        Level level_1 = new Level(LoadSave.LEVEL_1,200,50,20);
         levels.add(level_1);
-        Level level_2 = new Level(LoadSave.LEVEL_2,0,0,10);
+        Level level_2 = new Level(LoadSave.LEVEL_2,0,0,30);
         levels.add(level_2);
-        Level level_3 = new Level(LoadSave.LEVEL_3,200,50,10);
+        Level level_3 = new Level(LoadSave.LEVEL_3,200,50,50);
         levels.add(level_3);
     }
 
@@ -61,7 +59,7 @@ public class LevelManager {
         playing.resetAll();
         playing.setLevelComplete(false);
         playing.getEnemyManager().setSpawnPoint(levels.get(index).getEnemySpawnPoints());
-        playing.getEnemyManager().addBlueGolem();
+        playing.getEnemyManager().addEnemy();
 
         if (playing.gameComplete){
             playing.gameComplete = false;
